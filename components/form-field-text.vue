@@ -1,6 +1,6 @@
 <template>
 	<div class="inputWrapper" :class="{ active : focus || value, error : errorMessage }">
-		<label>{{label}}<span v-if="required"> *</span></label>
+		<label>{{label}}<span v-if="!required"> (optional)</span></label>
 		<button v-if="cleanArgs.type === 'password' && value" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		<input ref="input" :type="inputType" class="inputField" v-model="data" @focus="focus = true" @blur="focus = false"/>
 		<div class="validationError" v-if="errorMessage">{{errorMessage}}</div>

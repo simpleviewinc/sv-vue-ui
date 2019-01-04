@@ -75,6 +75,7 @@
 		data : function() {
 			const fieldsClean = this.fields.map(val => {
 				val.component = `form-field-${val.type}`;
+				val.required = val.validation && val.validation.required;
 				
 				return val;
 			});
