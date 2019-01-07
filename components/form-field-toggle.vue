@@ -1,5 +1,5 @@
 <template>
-	<div class="form-field-toggle">
+	<div class="form-field-toggle" v-if="valid">
 		<div class="input" @click="toggle" :class="{ active : data }">
 			<div class="slide"></div>
 			<div class="knob"></div>
@@ -11,11 +11,21 @@
 </template>
 
 <script>
+	import { advancedPropsMixin } from "../lib/utils.js";
+	
 	export default {
-		props : ["label", "value"],
+		mixins : [
+			advancedPropsMixin({
+				schema : [
+					{ name : "value", type : "boolean", required : true },
+					{ name : "label", type : "string", required : true }
+				],
+				prop : "valid"
+			})
+		],
 		data : function() {
 			return {
-				data : false
+				data : this.value
 			}
 		},
 		methods : {
@@ -34,8 +44,8 @@
 	}
 </script>
 
-<style lang="scss" scoped>
-	@import "@public/css/theme.scss";
+<style scoped>
+	@import "../css/theme.scss";
 	
 	.form-field-toggle {
 		position: relative;

@@ -1,31 +1,37 @@
 <template>
 	<div class="inputWrapper" :class="{ active : focus || value, error : errorMessage }">
 		<label>{{label}}<span v-if="!required"> (optional)</span></label>
-		<button v-if="cleanArgs.type === 'password' && value" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
+		<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		<input ref="input" :type="inputType" class="inputField" v-model="data" @focus="focus = true" @blur="focus = false"/>
 		<div class="validationError" v-if="errorMessage">{{errorMessage}}</div>
 	</div>
 </template>
 
 <script>
-	import jsvalidator from "jsvalidator";
+	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
-		props : ["value", "label", "required", "args"],
-		data : function() {
-			const cleanArgs = Object.assign({}, this.args);
-			jsvalidator.validate(cleanArgs, {
-				type : "object",
+		mixins : [
+			advancedPropsMixin({
 				schema : [
-					{ name : "type", type : "string", default : "text" },
-					{ name : "autofocus", type : "boolean", default : false }
+					{ name : "value", type : "string" },
+					{ name : "label", type : "string", required : true },
+					{ name : "required", type : "boolean" },
+					{
+						name : "args",
+						type : "object",
+						schema : [
+							{ name : "type", type : "string" },
+							{ name : "autofocus", type : "boolean" }
+						],
+						allowExtraKeys : false
+					}
 				],
-				allowExtraKeys : false,
-				throwOnInvalid : true
-			});
-			
+				prop : "valid"
+			})
+		],
+		data : function() {
 			return {
-				cleanArgs,
 				errorMessage : "",
 				data : this.value,
 				showCharacters : false,
@@ -38,6 +44,13 @@
 			}
 		},
 		computed : {
+			cleanArgs : function() {
+				const cleanArgs = { ...this.args };
+				cleanArgs.type = cleanArgs.type !== undefined ? cleanArgs.type : "text";
+				cleanArgs.autofocus = cleanArgs.autofocus !== undefined ? cleanArgs.autofocus : false;
+				
+				return cleanArgs;
+			},
 			error : function() {
 				return this.errorMessage !== "";
 			},
@@ -57,14 +70,14 @@
 					this.errorMessage = "";
 				}
 				
-				this.$emit("input", this.data);
+				this.$emit("input", this.data === "" ? undefined : this.data);
 			}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
-	@import "@public/css/theme.scss";
+<style scoped>
+	@import "../css/theme.scss";
 	
 	.inputWrapper {
 		margin-bottom: 1rem;
@@ -90,7 +103,7 @@
 	.inputWrapper .showButton {
 		position: absolute;
 		right: 0px;
-		top: -5px;
+		top: 10px;
 		padding: 5px 10px;
 		background: none;
 		border: 1px solid #ccc;

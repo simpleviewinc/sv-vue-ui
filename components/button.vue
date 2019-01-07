@@ -53,7 +53,7 @@
 </script>
 
 <style scoped>
-	@import "@simpleview/vue-ui/css/theme.scss";
+	@import "../css/theme.scss";
 	
 	.admin-button {
 		display: inline-block;

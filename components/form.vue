@@ -58,9 +58,6 @@
 		],
 		data : function() {
 			const modelData = { ...this.data };
-			this.fields.forEach(val => {
-				modelData[val.name] = modelData[val.name] || "";
-			});
 			
 			const fieldsClean = this.fields.map(val => {
 				return {
