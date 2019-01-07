@@ -1,5 +1,5 @@
 <template>
-	<div class="admin-button">
+	<div class="admin-button" v-if="valid">
 		<template v-if="isButton">
 			<button type="button" :class="classes" @click="click"><slot></slot></button>
 		</template>
@@ -10,36 +10,25 @@
 </template>
 
 <script>
-	import adminRouter from "@public/js/admin-router.js";
+	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
-		props : {
-			type : {
-				type : String,
-				required : true,
-				validator : function(value) {
-					return ["icon", "button"].includes(value);
-				}
-			},
-			actionType : {
-				type : String,
-				validator : function(value) {
-					return ["primary", "neutral", "destructive"].includes(value);
-				}
-			},
-			iconClass : {
-				type : String
-			},
-			go : {
-				type : Object
-			}
-		},
+		mixins : [
+			advancedPropsMixin({
+				schema : [
+					{ name : "type", type : "string", enum : ["icon", "button"], required : true },
+					{ name : "theme", type : "string", enum : ["primary", "none", "destructive"] },
+					{ name : "iconClass", type : "string" }
+				],
+				prop : "valid"
+			})
+		],
 		computed : {
 			classes : function() {
 				const temp = [];
 				
-				if (this.actionType) {
-					temp.push(this.actionType);
+				if (this.theme) {
+					temp.push(`theme_${this.theme}`);
 				}
 				
 				if (this.isIcon) {
@@ -57,10 +46,6 @@
 		},
 		methods : {
 			click : function() {
-				if (this.go !== undefined) {
-					adminRouter.go(this.go);
-				}
-				
 				this.$emit("click");
 			}
 		}
@@ -68,7 +53,7 @@
 </script>
 
 <style scoped>
-	@import "@public/css/theme.scss";
+	@import "@simpleview/vue-ui/css/theme.scss";
 	
 	.admin-button {
 		display: inline-block;
@@ -84,19 +69,22 @@
 		border: 0;
 		padding: 10px 20px;
 		border-radius: 5px;
-		color: black;
-		background: none;
 		text-decoration: none;
 		text-transform: uppercase;
 		cursor: pointer;
 	}
 	
-	.admin-button button.primary {
+	.admin-button button.theme_none {
+		background: none;
+		color: black;
+	}
+	
+	.admin-button button.theme_primary {
 		background: $highlight-color;
 		color: white;
 	}
 	
-	.admin-button button.destructive {
+	.admin-button button.theme_destructive {
 		background: $error-color;
 		color: white;
 	}

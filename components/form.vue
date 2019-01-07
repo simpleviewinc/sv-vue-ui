@@ -1,10 +1,10 @@
 <template>
-	<div class="admin-form">
-		<div class="header">
-			<h1>{{action}} {{title}}</h1>
-			<div class="buttons">
-				<admin-button type="button" @click="cancel">Cancel</admin-button>
-				<admin-button type="button" action-type="primary" @click="save">Save</admin-button>
+	<form class="admin-form" v-if="valid">
+		<div class="header" v-if="showHeader">
+			<h1 v-if="title">{{title}}</h1>
+			<div class="buttons" v-if="buttons">
+				<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
+				<admin-button type="button" theme="primary" @click="saveClick">Save</admin-button>
 			</div>
 		</div>
 		<div class="fields">
@@ -15,85 +15,69 @@
 					:label="field.label"
 					:required="field.required"
 					:args="field.args"
-					v-model="data[field.name]"
+					v-model="modelData[field.name]"
 				></component>
 			</div>
 		</div>
-	</div>
+	</form>
 </template>
 
 <script>
+	import Vue from "vue";
 	import formFieldText from "./form-field-text.vue";
 	import formFieldToggle from "./form-field-toggle.vue";
 	import adminButton from "./button.vue";
-	import adminRouter from "@public/js/admin-router.js";
-	import { allowedKeys } from "@public/js/utils.js";
-	import { validationSchema, validateForm } from "../lib/utils.js";
-	import { validate } from "jsvalidator";
+	import { validationSchema, validateForm, advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
-		props : {
-			title : {
-				type : String,
-				required : true
-			},
-			fields : {
-				type : Array,
-				required : true,
-				validator : function(value) {
-					const valid = validate(value, {
+		mixins : [
+			advancedPropsMixin({
+				schema : [
+					{
+						name : "fields",
 						type : "array",
 						schema : {
 							type : "object",
 							schema : [
 								{ name : "name", type : "string", required : true },
-								{ name : "component", type : "string" },
 								{ name : "label", type : "string", required : true },
 								{ name : "type", type : "string", enum : ["text", "toggle"], required : true },
 								{ name : "args", type : "object" },
 								{ name : "validation", ...validationSchema },
 							],
 							allowExtraKeys : false
-						}
-					});
-					
-					if (valid.err) {
-						console.log(valid.err);
-						return false;
-					}
-					
-					return true;
-				}
-			},
-			api : Object,
-			routerArgs : Object,
-			initialData : {
-				type : Object,
-				default : function() { return {}; }
-			}
-		},
+						},
+						required : true
+					},
+					{ name : "buttons", type : "boolean" },
+					{ name : "data", type : "object" },
+					{ name : "title", type : "string" }
+				],
+				prop : "valid"
+			})
+		],
 		data : function() {
-			const fieldsClean = this.fields.map(val => {
-				val.component = `form-field-${val.type}`;
-				val.required = val.validation && val.validation.required;
-				
-				return val;
+			const modelData = { ...this.data };
+			this.fields.forEach(val => {
+				modelData[val.name] = modelData[val.name] || "";
 			});
 			
-			const data = Object.assign({}, this.initialData);
-			fieldsClean.forEach(val => {
-				data[val.name] = "";
+			const fieldsClean = this.fields.map(val => {
+				return {
+					...val,
+					component : `form-field-${val.type}`,
+					required : val.validation && val.validation.required
+				}
 			});
 			
 			return {
-				action : "Create",
 				fieldsClean,
-				data
+				modelData
 			}
 		},
 		computed : {
-			queryColumns : function() {
-				return this.fieldsClean.map(val => val.name).join(" ");
+			showHeader : function() {
+				return this.title || this.buttons;
 			},
 			fieldsObj : function() {
 				return this.fieldsClean.reduce((prev, curr) => { 
@@ -108,21 +92,16 @@
 				}, {});
 			}
 		},
-		created : async function() {
-			if (this.routerArgs.args.filter === undefined) { return; }
-			
-			const data = await this.api.find({ filter : this.routerArgs.args.filter, fields : `docs { ${this.queryColumns} }` });
-			const doc = data.docs[0];
-			this.fieldsClean.forEach(val => {
-				if (doc[val.name] !== undefined) {
-					this.data[val.name] = doc[val.name];
-				}
-			});
-		},
 		methods : {
+			cancelClick : function() {
+				this.$emit("cancel");
+			},
+			saveClick : async function() {
+				await this.submit();
+			},
 			validate : async function() {
 				const result = await validateForm({
-					data : this.data,
+					data : this.modelData,
 					validation : this.validationObj
 				});
 				
@@ -136,16 +115,13 @@
 				
 				return true;
 			},
-			cancel : function() {
-				adminRouter.back();
-			},
-			save : async function() {
+			submit : async function() {
 				const valid = await this.validate();
 				if (valid === false) { return; }
 				
-				await this.api.upsert({ input : this.data });
-				
-				this.routerArgs.args.save();
+				this.$emit("submit", {
+					data : this.modelData
+				});
 			}
 		},
 		components : {
@@ -163,6 +139,6 @@
 	}
 	
 	.admin-form .header .buttons {
-		
+		display: flex;
 	}
 </style>
