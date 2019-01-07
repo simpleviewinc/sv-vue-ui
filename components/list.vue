@@ -2,11 +2,11 @@
 	<div class="admin-list">
 		<div class="header">
 			<h1>{{title}}</h1>
-			<div class="buttons">
+			<div class="buttons" v-if="buttons">
 				<admin-button
-					v-if="buttons.create"
+					v-if="buttons.includes('create')"
 					type="button"
-					actionType="primary"
+					theme="primary"
 					@click="create"
 				>Create New</admin-button>
 			</div>
@@ -24,19 +24,19 @@
 				<tr v-for="(row, i) in data">
 					<td>
 						<admin-button
-							v-if="actions.select"
+							v-if="actions.includes('select')"
 							type="button"
-							action-type="primary"
+							theme="primary"
 							@click="select(row)"
 						>Select</admin-button>
 						<admin-button
-							v-if="actions.edit"
+							v-if="actions.includes('edit')"
 							type="icon"
 							icon-class="fa-pencil-alt"
 							@click="edit(row)"
 						></admin-button>
 						<admin-button
-							v-if="actions.remove"
+							v-if="actions.includes('remove')"
 							type="icon"
 							icon-class="fa-trash-alt"
 							@click="remove(row)"
@@ -50,12 +50,8 @@
 			v-if="rowToRemove"
 			title="Delete?"
 			text="This will will permanently delete this item."
-		>
-			<div slot="buttons">
-				<admin-button type="button" @click="dialogRemoveCancel">Cancel</admin-button>
-				<admin-button type="button" action-type="destructive" @click="dialogRemoveRemove">Remove</admin-button>
-			</div>
-		</admin-dialog>
+			:buttons="dialogButtons"
+		></admin-dialog>
 	</div>
 </template>
 
@@ -64,98 +60,74 @@
 	import adminDialog from "./dialog.vue";
 	import adminRouter from "@public/js/admin-router.js";
 	import adminState from "@public/js/admin-state.js";
-	import { allowedKeys } from "@public/js/utils.js";
+	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
-		props : {
-			columns : Array,
-			title : String,
-			api : Object,
-			methods : {
-				type : Object,
-				default : function() { return {}; },
-				validator : allowedKeys(["getData", "select", "remove"])
-			},
-			createUrl : String,
-			idColumn : {
-				type : String,
-				required : true
-			},
-			actions : {
-				type : Object,
-				default : function() { return {}; },
-				validator : allowedKeys(["select", "edit", "remove"])
-			},
-			buttons : {
-				type : Object,
-				default : function() { return {}; },
-				validator : allowedKeys(["create"])
-			},
-			routerArgs : Object,
-			defaultFilter : Object
-		},
+		mixins : [
+			advancedPropsMixin({
+				schema : [
+					{
+						name : "columns",
+						type : "array",
+						schema : {
+							type : "object",
+							schema : [
+								{ name : "name", type : "string", required : true },
+								{ name : "label", type : "string", required : true }
+							],
+							allowExtraKeys : false
+						}
+					},
+					{ name : "title", type : "string" },
+					{ name : "actions", type : "array", schema : { type : "string", enum : ["select", "edit", "remove"] } },
+					{ name : "buttons", type : "array", schema : { type : "string", enum : ["create"] } },
+					{ name : "data", type : "array" }
+				],
+				prop : "valid"
+			})
+		],
 		data : function() {
-			if (this.actions.edit === true && this.createUrl === undefined) {
-				throw new Error("Action edit requires 'createUrl'");
-			}
-			
-			if (this.actions.select === true && this.methods.select === undefined) {
-				throw new Error("Action select requires 'methods.select'");
-			}
+			const dialogButtons = [
+				{
+					name : "cancel",
+					type : "button",
+					theme : "none",
+					label : "Cancel",
+					click : () => this.dialogRemoveCancel()
+				},
+				{
+					name : "remove",
+					type : "button",
+					theme : "destructive",
+					label : "Delete",
+					click : () => this.dialogRemoveRemove()
+				}
+			]
 			
 			return {
-				data : [],
+				dialogButtons,
 				selectedRow : undefined,
 				rowToRemove : false
 			}
 		},
-		computed : {
-			queryColumns : function() {
-				return [...this.columns.map(val => val.name), this.idColumn].join(" ");
-			}
-		},
 		created : async function() {
-			const data = await this.api.find({ filter : this.defaultFilter, fields : `docs { ${this.queryColumns} }` });
-			this.data = data.docs;
+			this.$emit("filter", {});
 		},
 		methods : {
 			dialogRemoveCancel : function() {
 				this.rowToRemove = undefined;
 			},
 			dialogRemoveRemove : async function() {
-				await this.api.remove({ filter : { [this.idColumn] : this.rowToRemove[this.idColumn] } });
-				this.rowToRemove = undefined;
-				adminRouter.go(this.routerArgs);
+				this.$emit("remove", { row : this.rowToRemove });
 			},
 			create : function() {
-				adminRouter.go({
-					url : this.createUrl,
-					type : "overlay",
-					args : {
-						save : () => {
-							adminRouter.back();
-							adminRouter.go(this.routerArgs);
-						}
-					}
-				});
+				this.$emit("create");
 			},
 			select : async function(row) {
-				await this.methods.select(row);
+				this.$emit("select", { row });
 			},
 			edit : function(row) {
-				adminRouter.go({
-					url : this.createUrl,
-					type : 'overlay',
-					args : {
-						filter : {
-							[this.idColumn] : row[this.idColumn]
-						},
-						save : () => {
-							adminRouter.back();
-							adminRouter.go(this.routerArgs);
-						}
-					}
-				});
+				this.$emit("edit", { row });
 			},
 			remove : function(row) {
 				this.rowToRemove = row;
@@ -169,7 +141,7 @@
 </script>
 
 <style lang="scss" scoped>
-	@import "@public/css/theme.scss";
+	@import "@simpleview/vue-ui/css/theme.scss";
 	
 	.admin-list .header {
 		display: flex;

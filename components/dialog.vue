@@ -1,19 +1,48 @@
 <template>
-	<div class="admin-dialog">
+	<div class="admin-dialog" v-if="valid">
 		<div class="mask"></div>
 		<div class="content">
 			<h2>{{title}}</h2>
 			<p>{{text}}</p>
 			<div class="buttons">
-				<slot name="buttons"></slot>
+				<admin-button v-for="button in buttons" :key="button.name" :type="button.type" :theme="button.theme" @click="button.click">{{button.label}}</admin-button>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import adminButton from "./button.vue";
+	import { advancedPropsMixin } from "../lib/utils.js";
+	
 	export default {
-		props : ["title", "text"]
+		mixins : [
+			advancedPropsMixin({
+				schema : [
+					{ name : "title", type : "string", required : true },
+					{ name : "text", type : "string", required : true },
+					{
+						name : "buttons",
+						type : "array",
+						schema : {
+							type : "object",
+							schema : [
+								{ name : "name", type : "string", required : true },
+								{ name : "type", type : "string", required : true },
+								{ name : "theme", type : "string", required : true },
+								{ name : "label", type : "string", required : true },
+								{ name : "click", type : "function", required : true }
+							],
+							allowExtraKeys : false
+						}
+					}
+				],
+				prop : "valid"
+			})
+		],
+		components : {
+			adminButton
+		}
 	}
 </script>
 
