@@ -39,9 +39,10 @@
 						schema : {
 							type : "object",
 							schema : [
+								{ name : "component", type : "any" },
 								{ name : "name", type : "string", required : true },
 								{ name : "label", type : "string", required : true },
-								{ name : "type", type : "string", enum : ["text", "toggle"], required : true },
+								{ name : "type", type : "string", enum : ["text", "toggle", "custom"], required : true },
 								{ name : "args", type : "object" },
 								{ name : "validation", ...validationSchema },
 							],
@@ -62,7 +63,7 @@
 			const fieldsClean = this.fields.map(val => {
 				return {
 					...val,
-					component : `form-field-${val.type}`,
+					component : val.component ? val.component : `form-field-${val.type}`,
 					required : val.validation && val.validation.required
 				}
 			});

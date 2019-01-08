@@ -1,10 +1,9 @@
 <template>
 	<div :class="name">
 		<admin-form v-if="config"
-			ref="form"
 			:title="config.title"
 			:buttons="true"
-			:data="config.data"
+			:data="data"
 			:fields="config.fields"
 			@submit="submit"
 			@cancel="cancel"
@@ -22,24 +21,34 @@
 		props : ["name", "routerArgs"],
 		created : async function() {
 			const module = await import(`${SV_VUE_UI_FORMMODULEPATH}/${this.name}.js`);
-			const data = await module.default({ routerArgs : this.routerArgs });
+			const config = await module.default({ routerArgs : this.routerArgs });
 			
-			validate(data, {
+			validate(config, {
 				type : "object",
 				schema : [
 					{ name : "title", type : "string" },
-					{ name : "data", type : "object" },
 					{ name : "fields", type : "array" },
-					{ name : "save", type : "function" }
+					{
+						name : "methods",
+						type : "object",
+						schema : [
+							{ name : "getData", type : "function" },
+							{ name : "save", type : "function" }
+						],
+						default : function() { return {} },
+						allowExtraKeys : false
+					}
 				],
 				allowExtraKeys : false,
 				throwOnInvalid : true
 			});
 			
-			this.config = data;
+			this.data = config.methods.getData ? await config.methods.getData() : undefined;
+			this.config = config;
 		},
 		data : function() {
 			return {
+				data : undefined,
 				config : undefined
 			}
 		},
@@ -49,9 +58,9 @@
 			},
 			submit : async function({ data }) {
 				try {
-					await this.config.save({ data });
+					await this.config.methods.save({ data });
 				} catch(e) {
-					alert(e.message);
+					adminRouter.errorDialog(e);
 					return;
 				}
 				

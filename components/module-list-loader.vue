@@ -24,10 +24,10 @@
 	export default {
 		props : ["name", "routerArgs"],
 		created : async function() {
-			const module = await import(`@modules/${this.name}.js`);
-			const data = module.default({ routerArgs : this.routerArgs });
+			const module = await import(`${SV_VUE_UI_LISTMODULEPATH}/${this.name}.js`);
+			const config = module.default({ routerArgs : this.routerArgs });
 			
-			validate(data, {
+			validate(config, {
 				type : "object",
 				schema : [
 					{ name : "title", type : "string" },
@@ -50,7 +50,7 @@
 				throwOnInvalid : true
 			});
 			
-			this.config = data;
+			this.config = config;
 		},
 		data : function() {
 			return {
