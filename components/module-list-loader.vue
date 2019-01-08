@@ -90,37 +90,42 @@
 				});
 			},
 			remove : async function({ row }) {
+				const buttons = [
+					{
+						name : "cancel",
+						type : "button",
+						theme : "none",
+						label : "Cancel",
+						click : () => {
+							adminRouter.dialogClose()
+						}
+					},
+					{
+						name : "remove",
+						type : "button",
+						theme : "destructive",
+						label : "Delete",
+						inProgress : false,
+						click : async () => {
+							buttons[1].inProgress = true;
+							
+							try {
+								await this.config.methods.remove({ filter : { [this.config.idColumn] : row[this.config.idColumn] } });
+							} catch(e) {
+								adminRouter.errorDialog(e);
+								return;
+							}
+							
+							adminRouter.dialogClose();
+							adminRouter.go(this.routerArgs);
+						}
+					}
+				]
+				
 				adminRouter.dialogOpen({
 					title : "Delete?",
 					text : "This will will permanently delete this item.",
-					buttons : [
-						{
-							name : "cancel",
-							type : "button",
-							theme : "none",
-							label : "Cancel",
-							click : () => {
-								adminRouter.dialogClose()
-							}
-						},
-						{
-							name : "remove",
-							type : "button",
-							theme : "destructive",
-							label : "Delete",
-							click : async () => {
-								try {
-									await this.config.methods.remove({ filter : { [this.config.idColumn] : row[this.config.idColumn] } });
-								} catch(e) {
-									adminRouter.errorDialog(e);
-									return;
-								}
-								
-								adminRouter.dialogClose();
-								adminRouter.go(this.routerArgs);
-							}
-						}
-					]
+					buttons : buttons
 				});
 			},
 			select : function({ row }) {

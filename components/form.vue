@@ -4,17 +4,18 @@
 			<h1 v-if="title">{{title}}</h1>
 			<div class="buttons" v-if="buttons">
 				<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
-				<admin-button type="button" theme="primary" @click="saveClick">Save</admin-button>
+				<admin-button type="button" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
 			</div>
 		</div>
 		<div class="fields">
 			<div class="field" v-for="field in fieldsClean">
 				<component
 					:is="field.component"
-					:ref="field.name"
 					:label="field.label"
 					:required="field.required"
 					:args="field.args"
+					:errorMessage="field.errorMessage"
+					@errorMessage="field.errorMessage = $event"
 					v-model="modelData[field.name]"
 				></component>
 			</div>
@@ -63,6 +64,7 @@
 			const fieldsClean = this.fields.map(val => {
 				return {
 					...val,
+					errorMessage : "",
 					component : val.component ? val.component : `form-field-${val.type}`,
 					required : val.validation && val.validation.required
 				}
@@ -70,7 +72,8 @@
 			
 			return {
 				fieldsClean,
-				modelData
+				modelData,
+				saveInProgress : false
 			}
 		},
 		computed : {
@@ -105,7 +108,7 @@
 				
 				if (result.valid === false) {
 					result.errors.forEach(val => {
-						this.$refs[val.name][0].errorMessage = val.message;
+						this.fieldsObj[val.name].errorMessage = val.message;
 					});
 					
 					return false;
@@ -116,6 +119,8 @@
 			submit : async function() {
 				const valid = await this.validate();
 				if (valid === false) { return; }
+				
+				this.saveInProgress = true;
 				
 				this.$emit("submit", {
 					data : this.modelData

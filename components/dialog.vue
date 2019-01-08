@@ -38,6 +38,7 @@
 								{ name : "type", type : "string", required : true },
 								{ name : "theme", type : "string", required : true },
 								{ name : "label", type : "string", required : true },
+								{ name : "inProgress", type : "boolean" },
 								{ name : "click", type : "function", required : true }
 							],
 							allowExtraKeys : false

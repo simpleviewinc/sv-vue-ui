@@ -18,15 +18,14 @@
 				schema : [
 					{ name : "type", type : "string", enum : ["icon", "button"], required : true },
 					{ name : "theme", type : "string", enum : ["primary", "none", "destructive"] },
+					{ name : "inProgress", type : "boolean" },
 					{ name : "iconClass", type : "string" }
 				],
 				prop : "valid"
 			})
 		],
 		data : function() {
-			return {
-				inProgress : false
-			}
+			return {}
 		},
 		computed : {
 			classes : function() {
@@ -51,7 +50,6 @@
 		},
 		methods : {
 			click : function() {
-				this.inProgress = true;
 				this.$emit("click");
 			}
 		}

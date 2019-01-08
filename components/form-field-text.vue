@@ -1,14 +1,14 @@
 <template>
-	<div class="inputWrapper" :class="{ active : focus || value, error : errorMessage }">
+	<div class="inputWrapper" :class="{ active : focus || value, error : hasError }">
 		<label>{{label}}<span v-if="!required"> (optional)</span></label>
 		<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		<input ref="input" :type="inputType" class="inputField" v-model="data" @focus="focus = true" @blur="focus = false"/>
-		<div class="validationError" v-if="errorMessage">{{errorMessage}}</div>
+		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
 	</div>
 </template>
 
 <script>
-	import { advancedPropsMixin } from "../lib/utils.js";
+	import { advancedPropsMixin, mirrorProp } from "../lib/utils.js";
 	
 	export default {
 		mixins : [
@@ -16,6 +16,7 @@
 				schema : [
 					{ name : "value", type : "string" },
 					{ name : "label", type : "string", required : true },
+					{ name : "errorMessage", type : "string" },
 					{ name : "required", type : "boolean" },
 					{
 						name : "args",
@@ -28,11 +29,11 @@
 					}
 				],
 				prop : "valid"
-			})
+			}),
+			mirrorProp({ name : "errorMessage" })
 		],
 		data : function() {
 			return {
-				errorMessage : "",
 				data : this.value,
 				showCharacters : false,
 				focus : false
@@ -51,8 +52,8 @@
 				
 				return cleanArgs;
 			},
-			error : function() {
-				return this.errorMessage !== "";
+			hasError : function() {
+				return this.$data.$_errorMessage !== "";
 			},
 			inputType : function() {
 				return this.cleanArgs.type === "text" || this.showCharacters === true ? "text" : "password";
@@ -67,7 +68,7 @@
 			},
 			data : function() {
 				if (this.data !== "") {
-					this.errorMessage = "";
+					this.$data.$_errorMessage = "";
 				}
 				
 				this.$emit("input", this.data === "" ? undefined : this.data);
