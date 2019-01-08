@@ -15,7 +15,7 @@
 
 <script>
 	import adminForm from "./form.vue";
-	import adminRouter from "@public/js/admin-router.js";
+	import adminRouter from "../lib/router.js";
 	import { validate } from "jsvalidator";
 	
 	export default {

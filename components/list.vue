@@ -51,8 +51,6 @@
 
 <script>
 	import adminButton from "./button.vue";
-	import adminRouter from "@public/js/admin-router.js";
-	import adminState from "@public/js/admin-state.js";
 	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
