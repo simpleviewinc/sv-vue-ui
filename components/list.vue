@@ -52,6 +52,12 @@
 			text="This will will permanently delete this item."
 			:buttons="dialogButtons"
 		></admin-dialog>
+		<admin-dialog
+			v-if="errorMessage"
+			title="Error"
+			:text="errorMessage"
+			:buttons="errorButtons"
+		></admin-dialog>
 	</div>
 </template>
 
@@ -104,8 +110,22 @@
 				}
 			]
 			
+			const errorButtons = [
+				{
+					name : "ok",
+					type : "button",
+					theme : "primary",
+					label : "Ok",
+					click : () => {
+						this.errorMessage = "";
+					}
+				}
+			]
+			
 			return {
 				dialogButtons,
+				errorButtons,
+				errorMessage : "",
 				selectedRow : undefined,
 				rowToRemove : false
 			}
@@ -141,7 +161,7 @@
 </script>
 
 <style lang="scss" scoped>
-	@import "@simpleview/vue-ui/css/theme.scss";
+	@import "../css/theme.scss";
 	
 	.admin-list .header {
 		display: flex;

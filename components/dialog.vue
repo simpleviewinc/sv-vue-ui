@@ -5,7 +5,14 @@
 			<h2>{{title}}</h2>
 			<p>{{text}}</p>
 			<div class="buttons">
-				<admin-button v-for="button in buttons" :key="button.name" :type="button.type" :theme="button.theme" @click="button.click">{{button.label}}</admin-button>
+				<admin-button
+					v-for="button in buttons"
+					:key="button.name"
+					:type="button.type"
+					:theme="button.theme"
+					:inProgress="button.inProgress"
+					@click="button.click"
+				>{{button.label}}</admin-button>
 			</div>
 		</div>
 	</div>

@@ -1,7 +1,7 @@
 <template>
 	<div class="admin-button" v-if="valid">
 		<template v-if="isButton">
-			<button type="button" :class="classes" @click="click"><slot></slot></button>
+			<button type="button" :class="classes" @click="click"><slot></slot> <i class="spinner fas fa-spinner fa-spin" v-if="inProgress"></i></button>
 		</template>
 		<template v-if="isIcon">
 			<i v-if="isIcon" class="fas" :class="classes" @click="click"></i>
@@ -23,6 +23,11 @@
 				prop : "valid"
 			})
 		],
+		data : function() {
+			return {
+				inProgress : false
+			}
+		},
 		computed : {
 			classes : function() {
 				const temp = [];
@@ -46,6 +51,7 @@
 		},
 		methods : {
 			click : function() {
+				this.inProgress = true;
 				this.$emit("click");
 			}
 		}
@@ -72,6 +78,11 @@
 		text-decoration: none;
 		text-transform: uppercase;
 		cursor: pointer;
+	}
+	
+	.admin-button button .spinner {
+		color: white;
+		padding: 0px 0px 0px 0px;
 	}
 	
 	.admin-button button.theme_none {
