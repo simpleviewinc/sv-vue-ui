@@ -46,24 +46,11 @@
 				</tr>
 			</tbody>
 		</table>
-		<admin-dialog
-			v-if="rowToRemove"
-			title="Delete?"
-			text="This will will permanently delete this item."
-			:buttons="dialogButtons"
-		></admin-dialog>
-		<admin-dialog
-			v-if="errorMessage"
-			title="Error"
-			:text="errorMessage"
-			:buttons="errorButtons"
-		></admin-dialog>
 	</div>
 </template>
 
 <script>
 	import adminButton from "./button.vue";
-	import adminDialog from "./dialog.vue";
 	import adminRouter from "@public/js/admin-router.js";
 	import adminState from "@public/js/admin-state.js";
 	import { advancedPropsMixin } from "../lib/utils.js";
@@ -93,53 +80,12 @@
 			})
 		],
 		data : function() {
-			const dialogButtons = [
-				{
-					name : "cancel",
-					type : "button",
-					theme : "none",
-					label : "Cancel",
-					click : () => this.dialogRemoveCancel()
-				},
-				{
-					name : "remove",
-					type : "button",
-					theme : "destructive",
-					label : "Delete",
-					click : () => this.dialogRemoveRemove()
-				}
-			]
-			
-			const errorButtons = [
-				{
-					name : "ok",
-					type : "button",
-					theme : "primary",
-					label : "Ok",
-					click : () => {
-						this.errorMessage = "";
-					}
-				}
-			]
-			
-			return {
-				dialogButtons,
-				errorButtons,
-				errorMessage : "",
-				selectedRow : undefined,
-				rowToRemove : false
-			}
+			return {}
 		},
 		created : async function() {
 			this.$emit("filter", {});
 		},
 		methods : {
-			dialogRemoveCancel : function() {
-				this.rowToRemove = undefined;
-			},
-			dialogRemoveRemove : async function() {
-				this.$emit("remove", { row : this.rowToRemove });
-			},
 			create : function() {
 				this.$emit("create");
 			},
@@ -150,11 +96,10 @@
 				this.$emit("edit", { row });
 			},
 			remove : function(row) {
-				this.rowToRemove = row;
+				this.$emit("remove", { row });
 			}
 		},
 		components : {
-			adminDialog,
 			adminButton
 		}
 	}
