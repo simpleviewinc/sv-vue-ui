@@ -1,5 +1,5 @@
 <template>
-	<div id="admin" v-if="loaded">
+	<div id="admin" v-if="valid">
 		<div class="header">
 			<slot name="header"></slot>
 		</div>
@@ -46,12 +46,44 @@
 	import adminRouter from "../lib/router.js";
 	import adminDialog from "./dialog.vue";
 	import { validate } from "jsvalidator";
+	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
+		mixins : [
+			advancedPropsMixin({
+				schema : [
+					{
+						name : "routeMap",
+						type : "indexObject",
+						schema : {
+							type : "object",
+							schema : [
+								{ name : "is", type : "object", required : true },
+								{ name : "name", type : "string" }
+							],
+							allowExtraKeys : false
+						}
+					},
+					{
+						name : "nav",
+						type : "array",
+						schema : {
+							type : "object",
+							schema : [
+								{ name : "name", type : "string", required : true },
+								{ name : "label", type : "string", required : true },
+								{ name : "routerArgs", type : "object" }
+							],
+							allowExtraKeys : false
+						}
+					}
+				],
+				prop : "valid"
+			})
+		],
 		props : ["routeMap", "nav"],
 		data : function() {
 			return {
-				loaded : false,
 				dialog : undefined,
 				mainComponent : undefined,
 				trayComponents : [],
@@ -68,8 +100,6 @@
 			window.onpopstate = (event) => {
 				// this.mainComponent = routeMap[document.location.pathname];
 			}
-			
-			this.loaded = true;
 			
 			this.$emit("created");
 		},
