@@ -219,6 +219,10 @@
 		color: $brand-blue;
 	}
 	
+	h1 {
+		font-family: "Museo Sans 500";
+	}
+	
 	.body .main h1 {
 		margin-top: 0px;
 		padding-top: 0px;

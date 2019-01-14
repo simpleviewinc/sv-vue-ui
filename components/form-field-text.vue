@@ -84,6 +84,7 @@
 		margin-bottom: 1rem;
 		position: relative;
 		padding-top: 10px;
+		max-width: 400px;
 	}
 	
 	.inputWrapper label {

@@ -20,6 +20,10 @@
 				></component>
 			</div>
 		</div>
+		<div class="buttons" v-if="buttons">
+			<admin-button type="button" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
+			<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
+		</div>
 	</form>
 </template>
 
@@ -143,5 +147,9 @@
 	
 	.admin-form .header .buttons {
 		display: flex;
+	}
+	
+	.admin-form .fields {
+		margin-bottom: 2rem;
 	}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div :class="name">
 		<admin-form v-if="config"
-			:title="config.title"
+			:title="title"
 			:buttons="true"
 			:data="data"
 			:fields="config.fields"
@@ -27,6 +27,7 @@
 				type : "object",
 				schema : [
 					{ name : "title", type : "string" },
+					{ name : "smartTitle", type : "boolean", default : false },
 					{ name : "fields", type : "array" },
 					{
 						name : "methods",
@@ -50,6 +51,15 @@
 			return {
 				data : undefined,
 				config : undefined
+			}
+		},
+		computed : {
+			title : function() {
+				if (this.config.smartTitle === false) {
+					return this.config.title;
+				}
+				
+				return this.routerArgs.args.filter ? `Edit ${this.config.title}` : `Create ${this.config.title}`;
 			}
 		},
 		methods : {
