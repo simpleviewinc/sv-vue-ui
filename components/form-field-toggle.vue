@@ -80,11 +80,11 @@
 	}
 	
 	.input.active .slide {
-		background: $highlight-color;
+		background: $brand-blue;
 	}
 	
 	.input.active .knob {
-		background: $highlight-color;
+		background: $brand-blue;
 		transform: translateX(23px);
 	}
 </style>

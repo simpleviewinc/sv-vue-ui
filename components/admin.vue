@@ -216,7 +216,7 @@
 	}
 	
 	body a {
-		color: $highlight-color;
+		color: $brand-blue;
 	}
 	
 	.body .main h1 {

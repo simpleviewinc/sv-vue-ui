@@ -71,11 +71,11 @@
 	
 	.admin-button button {
 		border: 0;
-		padding: 10px 20px;
-		border-radius: 5px;
+		padding: 14px 24px;
 		text-decoration: none;
 		text-transform: uppercase;
 		cursor: pointer;
+		font-family: "Museo Sans 900";
 	}
 	
 	.admin-button button .spinner {
@@ -89,12 +89,12 @@
 	}
 	
 	.admin-button button.theme_primary {
-		background: $highlight-color;
+		background: $brand-blue;
 		color: white;
 	}
 	
 	.admin-button button.theme_destructive {
-		background: $error-color;
+		background: $brand-red;
 		color: white;
 	}
 </style>

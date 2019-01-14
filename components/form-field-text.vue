@@ -91,14 +91,14 @@
 		top: 16px;
 		transition-property: font-size, top;
 		transition-duration: .25s;
-		font-size: 20px;
+		font-size: 16px;
 		pointer-events: none;
 	}
 	
 	.inputWrapper.active label {
 		top: 0px;
 		font-size: 14px;
-		color: $highlight-color;
+		color: $brand-blue;
 	}
 	
 	.inputWrapper .showButton {
@@ -108,7 +108,6 @@
 		padding: 5px 10px;
 		background: none;
 		border: 1px solid #ccc;
-		border-radius: 5px;
 		cursor: pointer;
 	}
 	
@@ -118,7 +117,7 @@
 	
 	.inputWrapper .validationError {
 		font-size: 12px;
-		color: $error-color;
+		color: $brand-red;
 		padding-top: 4px;
 		margin-top: 2px;
 	}
@@ -133,12 +132,12 @@
 	
 	.inputField:focus {
 		border: 0;
-		border-bottom: 2px solid $highlight-color;
+		border-bottom: 2px solid $brand-blue;
 		padding-bottom: 5px;
 		outline: none;
 	}
 	
 	.inputWrapper.error .inputField {
-		border-bottom: 2px solid $error-color;
+		border-bottom: 2px solid $brand-red;
 	}
 </style>
