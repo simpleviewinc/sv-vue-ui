@@ -85,7 +85,7 @@
 	
 	.admin-button button.theme_none {
 		background: none;
-		color: black;
+		color: $brand-almost-black;
 	}
 	
 	.admin-button button.theme_primary {

@@ -214,6 +214,7 @@
 		padding: 0;
 		font-family: "Museo Sans W01";
 		font-weight: 100;
+		color: $brand-almost-black;
 	}
 	
 	body a {

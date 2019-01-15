@@ -143,7 +143,7 @@
 	}
 	
 	.admin-list thead tr {
-		border-bottom: 1px solid #ccc;
+		border-bottom: 1px solid $brand-light-gray;
 	}
 	
 	.admin-list table th {
@@ -158,7 +158,7 @@
 	}
 	
 	.admin-list table tbody tr {
-		background: #f3f0ea;
+		background: $brand-zebra;
 	}
 	
 	.admin-list table tbody tr:nth-of-type(even) {

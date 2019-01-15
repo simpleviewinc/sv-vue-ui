@@ -1,8 +1,8 @@
 <template>
-	<div class="inputWrapper" :class="{ focus : focus, active : focus || value, error : hasError, ['theme_' + cleanArgs.theme] : true }">
+	<div class="inputWrapper" :class="{ focus : focus, active : focus || value, error : hasError, [`inputType_${inputType}`] : true }">
 		<div class="container">
-			<input ref="input" :type="inputType" class="inputField" v-model="data" @focus="focus = true" @blur="focus = false"/>
-			<label>{{label}}<span v-if="!required"> (optional)</span></label>
+			<input ref="input" :type="inputType" class="inputField textStyles" v-model="data" @focus="focus = true" @blur="focus = false"/>
+			<label class="textStyles">{{label}}<span v-if="!required"> (optional)</span></label>
 			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		</div>
 		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
@@ -25,7 +25,6 @@
 						type : "object",
 						schema : [
 							{ name : "type", type : "string" },
-							{ name : "theme", type : "string", enum : ["light", "dark"] },
 							{ name : "autofocus", type : "boolean" }
 						],
 						allowExtraKeys : false
@@ -52,7 +51,6 @@
 				const cleanArgs = { ...this.args };
 				cleanArgs.type = cleanArgs.type !== undefined ? cleanArgs.type : "text";
 				cleanArgs.autofocus = cleanArgs.autofocus !== undefined ? cleanArgs.autofocus : false;
-				cleanArgs.theme = cleanArgs.theme !== undefined ? cleanArgs.theme : "dark";
 				
 				return cleanArgs;
 			},
@@ -85,15 +83,14 @@
 	@import "../css/theme.scss";
 	
 	.inputWrapper {
-		margin-bottom: 1rem;
 		position: relative;
 		max-width: 400px;
 		width: 100%;
 	}
 	
 	.inputWrapper .container {
-		border-bottom: 1px solid #999;
-		height: 65px;
+		border: 1px solid $brand-light-gray;
+		height: 55px;
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
@@ -101,23 +98,32 @@
 	}
 	
 	.inputWrapper.focus .container {
-		border-bottom: 1px solid $brand-blue;
+		border: 1px solid $brand-blue;
+	}
+	
+	.inputWrapper .textStyles {
+		font-size: 20px;
+		font-family: "Museo Sans 300";
 	}
 	
 	.inputWrapper label {
 		position: relative;
 		top: 0px;
-		color: #555;
+		color: $brand-shadow;
 		transition-property: font-size, top;
 		transition-duration: .25s;
-		font-size: 18px;
 		pointer-events: none;
+		background: white;
+		margin-left: 9px;
+		padding: 3px;
+		color: $brand-medium-gray;
 	}
 	
 	.inputWrapper.active label {
 		position: relative;
-		top: -15px;
-		font-size: 14px;
+		top: -27px;
+		font-size: 13px;
+		font-family: "Museo Sans 700"
 	}
 	
 	.inputWrapper.focus label {
@@ -126,9 +132,10 @@
 	
 	.inputWrapper .showButton {
 		position: relative;
+		right: 12px;
 		padding: 5px 10px;
 		background: none;
-		border: 1px solid #ccc;
+		border: 1px solid $brand-light-gray;
 		cursor: pointer;
 	}
 	
@@ -151,29 +158,26 @@
 		left: 0px;
 		height: 100%;
 		width: 100%;
-		padding-top: 20px;
 		display: block;
 		border: 0;
 		outline: none;
 		background: none;
 		font-size: 16px;
+		padding-left: 12px;
+		padding-right: 12px;
+		color: $brand-almost-black;
 	}
 	
 	.inputWrapper.error .container {
-		border-bottom: 1px solid $brand-red;
+		border: 1px solid $brand-red;
 	}
 	
 	.inputWrapper.error label {
 		color: $brand-red;
 	}
 	
-	.inputWrapper.theme_dark .container {
-		background: #ddd;
-		padding-left: 12px;
-		padding-right: 12px;
-	}
-	
-	.inputWrapper.theme_dark .inputField {
-		padding: 20px 12px 0px 12px;
+	.inputWrapper.inputType_password .inputField {
+		/* allocate space for show/hide button */
+		padding-right: 80px;
 	}
 </style>
