@@ -2,7 +2,7 @@
 	<form class="admin-form" v-if="valid">
 		<div class="header" v-if="showHeader">
 			<div class="headerLeft">
-				<i class="back fas fa-arrow-left" @click="cancelClick"></i>
+				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancelClick"></i>
 				<h1 v-if="title">{{title}}</h1>
 			</div>
 			<div class="buttons" v-if="buttons">
@@ -59,6 +59,7 @@
 						required : true
 					},
 					{ name : "buttons", type : "boolean" },
+					{ name : "showBack", type : "boolean" },
 					{ name : "data", type : "object" },
 					{ name : "title", type : "string" }
 				],

@@ -2,6 +2,7 @@
 	<div :class="name">
 		<admin-form v-if="config"
 			:title="title"
+			:showBack="showBack"
 			:buttons="true"
 			:data="data"
 			:fields="config.fields"
@@ -60,6 +61,9 @@
 				}
 				
 				return this.routerArgs.args.filter ? `Edit ${this.config.title}` : `Create ${this.config.title}`;
+			},
+			showBack : function() {
+				return this.routerArgs.type === "overlay" ? true : false;
 			}
 		},
 		methods : {

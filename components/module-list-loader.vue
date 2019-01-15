@@ -3,10 +3,12 @@
 		<admin-list
 			v-if="config"
 			:title="config.title"
+			:showBack="showBack"
 			:columns="config.columns"
 			:actions="config.actions"
 			:buttons="config.buttons"
 			:data="data"
+			@cancel="cancel"
 			@filter="filter"
 			@edit="edit"
 			@create="create"
@@ -58,7 +60,15 @@
 				data : []
 			}
 		},
+		computed : {
+			showBack : function() {
+				return this.routerArgs.type === "overlay" ? true : false;
+			}
+		},
 		methods : {
+			cancel : function() {
+				adminRouter.back();
+			},
 			edit : function({ row }) {
 				adminRouter.go({
 					url : this.config.createUrl,

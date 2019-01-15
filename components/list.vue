@@ -1,7 +1,10 @@
 <template>
 	<div class="admin-list">
 		<div class="header">
-			<h1>{{title}}</h1>
+			<div class="headerLeft">
+				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancel"></i>
+				<h1>{{title}}</h1>
+			</div>
 			<div class="buttons" v-if="buttons">
 				<admin-button
 					v-if="buttons.includes('create')"
@@ -70,6 +73,7 @@
 						}
 					},
 					{ name : "title", type : "string" },
+					{ name : "showBack", type : "boolean" },
 					{ name : "actions", type : "array", schema : { type : "string", enum : ["select", "edit", "remove"] } },
 					{ name : "buttons", type : "array", schema : { type : "string", enum : ["create"] } },
 					{ name : "data", type : "array" }
@@ -84,6 +88,9 @@
 			this.$emit("filter", {});
 		},
 		methods : {
+			cancel : function() {
+				this.$emit("cancel");
+			},
 			create : function() {
 				this.$emit("create");
 			},
@@ -111,6 +118,16 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 1rem;
+	}
+	
+	.admin-list .headerLeft {
+		display: flex;
+		align-items: center;
+	}
+	
+	.admin-list .headerLeft .back {
+		padding-right: 10px;
+		cursor: pointer;
 	}
 	
 	.admin-list h1 {
