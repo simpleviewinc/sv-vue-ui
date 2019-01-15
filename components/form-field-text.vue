@@ -109,7 +109,6 @@
 	.inputWrapper label {
 		position: relative;
 		top: 0px;
-		color: $brand-shadow;
 		transition-property: font-size, top;
 		transition-duration: .25s;
 		pointer-events: none;
@@ -124,6 +123,7 @@
 		top: -27px;
 		font-size: 13px;
 		font-family: $font-heavy;
+		color: $brand-almost-black;
 	}
 	
 	.inputWrapper.focus label {
