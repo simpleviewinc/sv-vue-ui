@@ -220,6 +220,10 @@
 		font-family: "Museo Sans 500";
 	}
 	
+	h2 {
+		font-family: "Museo Sans 500";
+	}
+	
 	.body .main h1 {
 		margin-top: 0px;
 		padding-top: 0px;
