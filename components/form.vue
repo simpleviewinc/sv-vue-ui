@@ -171,6 +171,6 @@
 	}
 	
 	.admin-form .fields {
-		margin-bottom: 2rem;
+		margin-bottom: 1rem;
 	}
 </style>

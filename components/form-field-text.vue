@@ -1,8 +1,10 @@
 <template>
-	<div class="inputWrapper" :class="{ active : focus || value, error : hasError }">
-		<label>{{label}}<span v-if="!required"> (optional)</span></label>
-		<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
-		<input ref="input" :type="inputType" class="inputField" v-model="data" @focus="focus = true" @blur="focus = false"/>
+	<div class="inputWrapper" :class="{ focus : focus, active : focus || value, error : hasError, ['theme_' + cleanArgs.theme] : true }">
+		<div class="container">
+			<input ref="input" :type="inputType" class="inputField" v-model="data" @focus="focus = true" @blur="focus = false"/>
+			<label>{{label}}<span v-if="!required"> (optional)</span></label>
+			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
+		</div>
 		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
 	</div>
 </template>
@@ -23,6 +25,7 @@
 						type : "object",
 						schema : [
 							{ name : "type", type : "string" },
+							{ name : "theme", type : "string", enum : ["light", "dark"] },
 							{ name : "autofocus", type : "boolean" }
 						],
 						allowExtraKeys : false
@@ -49,6 +52,7 @@
 				const cleanArgs = { ...this.args };
 				cleanArgs.type = cleanArgs.type !== undefined ? cleanArgs.type : "text";
 				cleanArgs.autofocus = cleanArgs.autofocus !== undefined ? cleanArgs.autofocus : false;
+				cleanArgs.theme = cleanArgs.theme !== undefined ? cleanArgs.theme : "dark";
 				
 				return cleanArgs;
 			},
@@ -83,29 +87,45 @@
 	.inputWrapper {
 		margin-bottom: 1rem;
 		position: relative;
-		padding-top: 10px;
 		max-width: 400px;
+		width: 100%;
+	}
+	
+	.inputWrapper .container {
+		border-bottom: 1px solid #999;
+		height: 65px;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.inputWrapper.focus .container {
+		border-bottom: 1px solid $brand-blue;
 	}
 	
 	.inputWrapper label {
-		position: absolute;
-		top: 16px;
+		position: relative;
+		top: 0px;
+		color: #555;
 		transition-property: font-size, top;
 		transition-duration: .25s;
-		font-size: 16px;
+		font-size: 18px;
 		pointer-events: none;
 	}
 	
 	.inputWrapper.active label {
-		top: 0px;
+		position: relative;
+		top: -15px;
 		font-size: 14px;
+	}
+	
+	.inputWrapper.focus label {
 		color: $brand-blue;
 	}
 	
 	.inputWrapper .showButton {
-		position: absolute;
-		right: 0px;
-		top: 10px;
+		position: relative;
 		padding: 5px 10px;
 		background: none;
 		border: 1px solid #ccc;
@@ -124,21 +144,28 @@
 	}
 	
 	.inputField {
-		display: block;
+		position: absolute;
+		height: 100%;
 		width: 100%;
+		padding-top: 20px;
+		display: block;
 		border: 0;
-		border-bottom: 1px solid #ccc;
-		padding: 12px 0px 6px 0px;
-	}
-	
-	.inputField:focus {
-		border: 0;
-		border-bottom: 2px solid $brand-blue;
-		padding-bottom: 5px;
 		outline: none;
+		background: none;
+		font-size: 16px;
 	}
 	
-	.inputWrapper.error .inputField {
-		border-bottom: 2px solid $brand-red;
+	.inputWrapper.error .container {
+		border-bottom: 1px solid $brand-red;
+	}
+	
+	.inputWrapper.error label {
+		color: $brand-red;
+	}
+	
+	.inputWrapper.theme_dark .container {
+		background: #ddd;
+		padding-left: 12px;
+		padding-right: 12px;
 	}
 </style>
