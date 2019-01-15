@@ -103,7 +103,7 @@
 	
 	.inputWrapper .textStyles {
 		font-size: 20px;
-		font-family: "Museo Sans 300";
+		font-family: $font-light;
 	}
 	
 	.inputWrapper label {
@@ -123,7 +123,7 @@
 		position: relative;
 		top: -27px;
 		font-size: 13px;
-		font-family: "Museo Sans 700"
+		font-family: $font-heavy;
 	}
 	
 	.inputWrapper.focus label {

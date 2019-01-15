@@ -75,7 +75,7 @@
 		text-decoration: none;
 		text-transform: uppercase;
 		cursor: pointer;
-		font-family: "Museo Sans 900";
+		font-family: $font-heavy;
 	}
 	
 	.admin-button button .spinner {

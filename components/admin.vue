@@ -212,7 +212,7 @@
 		min-height: 100%;
 		margin: 0;
 		padding: 0;
-		font-family: "Museo Sans W01";
+		font-family: $font-light;
 		font-weight: 100;
 		color: $brand-almost-black;
 	}
@@ -222,11 +222,11 @@
 	}
 	
 	h1 {
-		font-family: "Museo Sans 500";
+		font-family: $font-medium;
 	}
 	
 	h2 {
-		font-family: "Museo Sans 500";
+		font-family: $font-medium;
 	}
 	
 	.body .main h1 {
@@ -241,6 +241,8 @@
 </style>
 
 <style scoped>
+	@import "../css/theme.scss";
+	
 	#admin {
 		display: flex;
 		flex-direction: column;
@@ -248,8 +250,8 @@
 	}
 	
 	.header {
-		background: #1a1a1a;
-		color: #ccc;
+		background: $brand-almost-black;
+		color: $brand-light-gray;
 		height: 60px;
 		display: flex;
 		align-items: center;
@@ -278,7 +280,7 @@
 	}
 	
 	.header .leftContainer .switcherContainer:hover {
-		background: black;
+		background: $brand-black;
 	}
 	
 	.header .leftContainer .switcherContainer i {
@@ -291,7 +293,7 @@
 	}
 	
 	.header .leftContainer .logoContainer:hover {
-		background: black;
+		background: $brand-black;
 	}
 	
 	.header .userContainer {
@@ -309,7 +311,7 @@
 	
 	.body .sidebar {
 		width: 90px;
-		background: #313131;
+		background: $brand-shadow;
 	}
 	
 	.body .sidebar ul {
@@ -320,13 +322,13 @@
 	
 	.body .sidebar ul li {
 		cursor: pointer;
-		color: #ccc;
+		color: $brand-light-gray;
 		text-decoration: none;
 		display: block;
 		text-align: center;
 		width: 100%;
 		padding: 20px 0px;
-		border-bottom: 1px solid #999;
+		border-bottom: 1px solid $brand-medium-gray;
 		text-transform: uppercase;
 		font-size: 14px;
 	}
@@ -337,7 +339,7 @@
 	}
 	
 	.body .sidebar ul li:hover {
-		background: #1A1A1A;
+		background: $brand-almost-black;
 	}
 	
 	.body .main {
@@ -385,7 +387,6 @@
 		height: 100%;
 		background: white;
 		padding: 20px;
-		border-left: 1px solid black;
 	}
 	
 	.overlay .trayHeader {

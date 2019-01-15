@@ -143,6 +143,8 @@
 	}
 	
 	.admin-list thead tr {
+		font-family: $font-heavy;
+		font-size: 14px;
 		border-bottom: 1px solid $brand-light-gray;
 	}
 	
