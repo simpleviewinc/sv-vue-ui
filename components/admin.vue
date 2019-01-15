@@ -6,7 +6,10 @@
 		<div class="body">
 			<div class="sidebar">
 				<ul v-if="nav">
-					<li v-for="item in nav" :key="item.name" @click="go(item.routerArgs)">{{item.label}}</li>
+					<li v-for="item in nav" :key="item.name" @click="go(item.routerArgs)">
+						<i v-if="item.icon" class="fas" :class="{ [item.icon] : true }"></i>
+						<div>{{item.label}}</div>
+					</li>
 				</ul>
 			</div>
 			<div class="main" v-if="mainComponent">
@@ -69,6 +72,7 @@
 							schema : [
 								{ name : "name", type : "string", required : true },
 								{ name : "label", type : "string", required : true },
+								{ name : "icon", type : "string" },
 								{ name : "routerArgs", type : "object" }
 							],
 							allowExtraKeys : false
@@ -244,7 +248,7 @@
 	
 	.header {
 		background: #1a1a1a;
-		color: #bebebe;
+		color: #ccc;
 		height: 60px;
 		display: flex;
 		align-items: center;
@@ -315,13 +319,20 @@
 	
 	.body .sidebar ul li {
 		cursor: pointer;
-		color: #999;
+		color: #ccc;
 		text-decoration: none;
 		display: block;
 		text-align: center;
 		width: 100%;
 		padding: 20px 0px;
 		border-bottom: 1px solid #999;
+		text-transform: uppercase;
+		font-size: 14px;
+	}
+	
+	.body .sidebar ul li i {
+		font-size: 20px;
+		padding-bottom: 5px;
 	}
 	
 	.body .sidebar ul li:hover {
@@ -329,6 +340,7 @@
 	}
 	
 	.body .main {
+		position: relative;
 		padding: 20px;
 		flex: 1;
 	}
