@@ -103,7 +103,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 	@import "../css/theme.scss";
 	
 	.admin-list .header {
@@ -126,18 +126,17 @@
 	}
 	
 	.admin-list thead tr {
-		background: #5b5852;
+		border-bottom: 1px solid #ccc;
 	}
 	
 	.admin-list table th {
 		text-align: left;
-		padding: 10px;
-		color: white;
-		border-right: 1px solid #7a7772;
+		padding: 10px 10px 10px 10px;
+		color: black;
+		font-weight: normal;
 	}
 	
 	.admin-list table tbody {
-		border: 1px solid #ccc;
 		border-top: 0px;
 	}
 	
@@ -146,7 +145,7 @@
 	}
 	
 	.admin-list table tbody tr:nth-of-type(even) {
-		background: #fefdfc;
+		background: white;
 	}
 	
 	.admin-list table tbody td {

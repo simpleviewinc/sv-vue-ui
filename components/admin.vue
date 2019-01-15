@@ -26,9 +26,6 @@
 					v-for="(trayComponent, i) in trayComponents"
 					:key="i"
 				>
-					<div class="trayHeader">
-						<i class="back fas fa-arrow-left" @click="closeTray"></i>
-					</div>
 					<component v-bind="trayComponent"></component>
 				</div>
 			</transition-group>

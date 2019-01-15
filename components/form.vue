@@ -1,7 +1,10 @@
 <template>
 	<form class="admin-form" v-if="valid">
 		<div class="header" v-if="showHeader">
-			<h1 v-if="title">{{title}}</h1>
+			<div class="headerLeft">
+				<i class="back fas fa-arrow-left" @click="cancelClick"></i>
+				<h1 v-if="title">{{title}}</h1>
+			</div>
 			<div class="buttons" v-if="buttons">
 				<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
 				<admin-button type="button" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
@@ -142,7 +145,25 @@
 <style scoped>
 	.admin-form .header {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
+		border-bottom: 1px solid #ccc;
+		margin-bottom: 2rem;
+		padding-bottom: 1rem;
+	}
+	
+	.admin-form .headerLeft {
+		display: flex;
+		align-items: center;
+	}
+	
+	.admin-form .headerLeft .back {
+		padding-right: 10px;
+		cursor: pointer;
+	}
+	
+	.admin-form .header h1 {
+		margin: 0px;
 	}
 	
 	.admin-form .header .buttons {
