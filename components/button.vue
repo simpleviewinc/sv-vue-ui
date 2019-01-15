@@ -93,6 +93,10 @@
 		color: white;
 	}
 	
+	.admin-button button.theme_primary:hover {
+		background: $brand-blue-hover;
+	}
+	
 	.admin-button button.theme_destructive {
 		background: $brand-red;
 		color: white;
