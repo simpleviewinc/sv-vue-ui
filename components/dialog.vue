@@ -2,8 +2,8 @@
 	<div class="admin-dialog" v-if="valid">
 		<div class="mask"></div>
 		<div class="content">
-			<h2>{{title}}</h2>
-			<p>{{text}}</p>
+			<h2 v-if="title">{{title}}</h2>
+			<p v-if="text">{{text}}</p>
 			<div class="buttons">
 				<admin-button
 					v-for="button in buttons"
@@ -26,8 +26,8 @@
 		mixins : [
 			advancedPropsMixin({
 				schema : [
-					{ name : "title", type : "string", required : true },
-					{ name : "text", type : "string", required : true },
+					{ name : "title", type : "string" },
+					{ name : "text", type : "string" },
 					{
 						name : "buttons",
 						type : "array",
