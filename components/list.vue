@@ -1,5 +1,5 @@
 <template>
-	<div class="admin-list">
+	<div class="admin-list" v-if="valid">
 		<div class="header">
 			<div class="headerLeft">
 				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancel"></i>
