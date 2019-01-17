@@ -1,5 +1,5 @@
 # sv-admin-ui
-Vue component library for admin interfaces. Use in sv-auth and Barberstock re-write.
+Vue component library for admin interfaces. Used in sv-auth and Barberstock re-write.
 
 ## Necessary Dependencies
 
