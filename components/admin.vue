@@ -197,7 +197,7 @@
 </script>
 
 <style lang="scss">
-	@import "@simpleview/vue-ui/css/theme.scss";
+	@import "../css/theme.scss";
 	
 	* {
 		box-sizing: border-box;
