@@ -65,6 +65,9 @@
 			}
 		},
 		watch : {
+			focus : function(newVal) {
+				this.$emit(newVal === true ? "focus" : "blur");
+			},
 			value : function(newVal) {
 				this.data = newVal;
 			},

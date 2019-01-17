@@ -34,6 +34,7 @@
 	import Vue from "vue";
 	import formFieldText from "./form-field-text.vue";
 	import formFieldToggle from "./form-field-toggle.vue";
+	import formFieldTagselect from "./form-field-tagselect.vue";
 	import adminButton from "./button.vue";
 	import { validationSchema, validateForm, advancedPropsMixin } from "../lib/utils.js";
 	
@@ -50,7 +51,7 @@
 								{ name : "component", type : "any" },
 								{ name : "name", type : "string", required : true },
 								{ name : "label", type : "string", required : true },
-								{ name : "type", type : "string", enum : ["text", "toggle", "custom"], required : true },
+								{ name : "type", type : "string", enum : ["text", "toggle", "custom", "tagselect"], required : true },
 								{ name : "args", type : "object" },
 								{ name : "validation", ...validationSchema },
 							],
@@ -138,7 +139,8 @@
 		components : {
 			adminButton,
 			formFieldText,
-			formFieldToggle
+			formFieldToggle,
+			formFieldTagselect
 		}
 	}
 </script>
