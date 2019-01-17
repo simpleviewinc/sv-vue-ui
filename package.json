@@ -1,0 +1,11 @@
+{
+  "name": "@simpleview/vue-ui",
+  "version": "1.0.0",
+  "description": "Vue admin interface components and UI/UX utilities",
+  "author" : "Owen Allen <owenallenaz@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simpleviewinc/sv-vue-ui.git"
+  },
+  "homepage": "https://github.com/simpleviewinc/sv-vue-ui#readme"
+}
