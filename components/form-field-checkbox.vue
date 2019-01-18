@@ -1,6 +1,9 @@
 <template>
 	<div class="form-field-browse-tags">
-		<h2>{{label}}</h2>
+		<h3>{{label}}</h3>
+		<div class="loading" v-if="options === undefined">
+			Loading... <i class="fas fa-spinner fa-spin"></i>
+		</div>
 		<div class="options" v-if="options">
 			<div class="option" v-for="option in options" :key="option.value">
 				<i
