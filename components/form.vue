@@ -1,5 +1,5 @@
 <template>
-	<form class="admin-form" v-if="valid">
+	<form class="admin-form" v-if="valid" @submit="submit">
 		<div class="header" v-if="showHeader">
 			<div class="headerLeft">
 				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancelClick"></i>
@@ -19,6 +19,7 @@
 					:args="field.args"
 					:errorMessage="field.errorMessage"
 					@errorMessage="field.errorMessage = $event"
+					@submit="submit"
 					v-model="modelData[field.name]"
 				></component>
 			</div>
