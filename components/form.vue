@@ -1,5 +1,5 @@
 <template>
-	<form class="admin-form" v-if="valid" @submit="submit">
+	<form class="admin-form" v-if="valid" @submit.prevent="submit">
 		<div class="header" v-if="showHeader">
 			<div class="headerLeft">
 				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancelClick"></i>
@@ -28,6 +28,7 @@
 			<admin-button type="button" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
 			<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
 		</div>
+		<slot name="afterForm"></slot>
 	</form>
 </template>
 
