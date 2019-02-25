@@ -6,11 +6,13 @@
 			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		</div>
 		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
+		<strengthMeter v-if="cleanArgs.showmeter === true && !hasError" :field="data"></strengthMeter>
 	</div>
 </template>
 
 <script>
 	import { advancedPropsMixin, mirrorProp } from "../lib/utils.js";
+	import strengthMeter from "./strength-meter.vue";
 	
 	export default {
 		mixins : [
@@ -25,7 +27,8 @@
 						type : "object",
 						schema : [
 							{ name : "type", type : "string" },
-							{ name : "autofocus", type : "boolean" }
+							{ name : "autofocus", type : "boolean" },
+							{ name : "showmeter", type : "boolean" }
 						],
 						allowExtraKeys : false
 					}
@@ -42,6 +45,7 @@
 			}
 		},
 		mounted : function() {
+			console.log("text", this)
 			if (this.cleanArgs.autofocus === true) {
 				this.$refs.input.focus();
 			}
@@ -78,6 +82,9 @@
 				
 				this.$emit("input", this.data === "" ? undefined : this.data);
 			}
+		},
+		components : {
+			strengthMeter
 		}
 	}
 </script>
@@ -92,6 +99,7 @@
 	}
 	
 	.inputWrapper .container {
+		position: relative;
 		border: 1px solid $brand-light-gray;
 		height: 55px;
 		width: 100%;
