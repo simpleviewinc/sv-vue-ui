@@ -111,6 +111,9 @@
 				}, {});
 			}
 		},
+		mounted : function(){
+			console.log("Form", this)
+		},
 		methods : {
 			cancelClick : function() {
 				this.$emit("cancel");

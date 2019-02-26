@@ -1,5 +1,5 @@
 <template>
-	<div class="strength-meter" v-if="visible">
+	<div class="strength-meter" v-if="show">
 		<div class="wrap">
 			<div class="item" :class="getStrengthClass(0)"></div>
 			<div class="item" :class="getStrengthClass(1)"></div>
@@ -10,52 +10,51 @@
 </template>
 
 <script>
+	import { validate } from "jsvalidator";
+
 	export default {
-		props : ["field"],
+		props : ["field", "strengthMeter"],
 		data : function() {
 			return {
-				visible : false,
-				score: undefined,
+				show : false,
+				score : "",
 				classes: [
 					'weak active',
 					'medium active',
 					'strong active'
 				],
-				messages:  [
-					'Password is weak',
-					'Could be stronger',
-					'Strong password'
-				]
+				message: ""
         	}
-		},
-		computed : {
-			message : function() {
-				return this.score !== undefined ? this.messages[this.score] : "Password is too short";
-			}
 		},
 		watch: {
 			field : {
 				immediate: true,
-				handler	: function(val) {
-					if(val !== undefined){
-						this.visible = true;
-						if(val.length >= 8){
-							// Special characters = strong strength password
-							for(let letter in val){
-								const i = val.charCodeAt(letter);
-								
-								if((i >= 33 && i <= 47) || (i >= 58 && i <= 64) || (i >= 91 && i <= 96) || (i >= 123 && i <= 126) && i >= 128 ) {
-									return this.score = 2;
-								}
-							}
+				handler	: async function(val){
+					const result = await this.strengthMeter(val);
+					const validResult = validate(result, {
+						type : "object",
+						schema : [
+							{ name : "strength", type : "string", required : true },
+							{ name : "message", type : "string" },
+							{ name : "show", type : "boolean" },
+						],
+						required : true,
+						allowExtraKeys : false
+					});
 
-							return /[A-Z]/.test(val) || /\d/.test(val) ? this.score = 1 : this.score = 0;
-						} else {
-							return this.score = undefined;
-						}
-					} else {
-						this.visible = false;
+					if (validResult.err) {
+						throw validResult.err;
 					}
+
+					const map = {
+						week : 0,
+						medium : 1,
+						strong : 2
+					}
+
+					this.show = validResult.data.show;
+					this.message = validResult.data.message;
+					this.score = map[validResult.data.strength] !== undefined ?  map[validResult.data.strength] : "";
 				}
 			}
 		},
