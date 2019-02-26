@@ -45,7 +45,6 @@
 			}
 		},
 		mounted : function() {
-			console.log("text", this)
 			if (this.cleanArgs.autofocus === true) {
 				this.$refs.input.focus();
 			}
