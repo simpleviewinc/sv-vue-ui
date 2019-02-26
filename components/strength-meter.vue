@@ -1,5 +1,5 @@
 <template>
-	<div class="strength-meter">
+	<div class="strength-meter" v-if="visible">
 		<div class="wrap">
 			<div class="item" :class="getStrengthClass(0)"></div>
 			<div class="item" :class="getStrengthClass(1)"></div>
@@ -14,6 +14,7 @@
 		props : ["field"],
 		data : function() {
 			return {
+				visible : false,
 				score: undefined,
 				classes: [
 					'weak active',
@@ -29,21 +30,16 @@
 		},
 		computed : {
 			message : function() {
-				if (this.score !== undefined) {
-					return this.messages[this.score];
-				} else {
-					//default message
-					return "Password is too short";
-				}
-      		}
+				return this.score !== undefined ? this.messages[this.score] : "Password is too short";
+			}
 		},
 		watch: {
 			field : {
 				immediate: true,
-				handler	: async function(val) {
-					if(val !== undefined) {
+				handler	: function(val) {
+					if(val !== undefined){
+						this.visible = true;
 						if(val.length >= 8){
-
 							// Special characters = strong strength password
 							for(let letter in val){
 								const i = val.charCodeAt(letter);
@@ -53,26 +49,19 @@
 								}
 							}
 
-							// Uppercase or digit = medium strength password	
-							if(/[A-Z]/.test(val) || /\d/.test(val)){
-								return this.score = 1;
-							} else {
-								// all else = weak strength password
-								return this.score = 0;
-							}
+							return /[A-Z]/.test(val) || /\d/.test(val) ? this.score = 1 : this.score = 0;
 						} else {
 							return this.score = undefined;
 						}
+					} else {
+						this.visible = false;
 					}
 				}
 			}
 		},
 		methods : {
 			getStrengthClass : function(strength) {
-				if (this.score >= strength) {
-					return this.classes[this.score];
-				}
-				return ''
+				return this.score >= strength ? this.classes[this.score] : '';
 			}
 		}
 	}
