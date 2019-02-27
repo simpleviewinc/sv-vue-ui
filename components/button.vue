@@ -1,7 +1,14 @@
 <template>
 	<div class="admin-button" v-if="valid">
 		<template v-if="isButton">
-			<button type="button" :class="classes" @click="click"><slot></slot> <i class="spinner fas fa-spinner fa-spin" v-if="inProgress"></i></button>
+			<button 
+				:type="isButton" 
+				:class="classes"
+				@click="click"
+			>
+				<slot></slot>
+				<i class="spinner fas fa-spinner fa-spin" v-if="inProgress"></i>
+			</button>
 		</template>
 		<template v-if="isIcon">
 			<i v-if="isIcon" class="fas" :class="classes" @click="click"></i>
@@ -16,7 +23,7 @@
 		mixins : [
 			advancedPropsMixin({
 				schema : [
-					{ name : "type", type : "string", enum : ["icon", "button"], required : true },
+					{ name : "type", type : "string", enum : ["icon", "button", "submit"], required : true },
 					{ name : "theme", type : "string", enum : ["primary", "none", "destructive"] },
 					{ name : "inProgress", type : "boolean" },
 					{ name : "iconClass", type : "string" }
@@ -45,12 +52,16 @@
 				return this.type === "icon";
 			},
 			isButton : function() {
-				return this.type === "button";
+				if(this.type !== "icon"){
+					return this.type;
+				}
 			}
 		},
 		methods : {
 			click : function() {
-				this.$emit("click");
+				if(this.type !== "submit"){
+					this.$emit("click");
+				}
 			}
 		}
 	}
