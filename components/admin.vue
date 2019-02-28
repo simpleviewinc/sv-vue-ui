@@ -1,9 +1,9 @@
 <template>
-	<div id="admin" v-if="valid">
+	<div id="admin" v-if="valid" :class="{ 'overlay-open' : trayOpen }">
 		<div class="header">
 			<slot name="header"></slot>
 		</div>
-		<div class="body">
+		<div class="body" >
 			<div class="sidebar">
 				<ul v-if="nav">
 					<li v-for="item in nav" :key="item.name" @click="go(item.routerArgs)">
@@ -248,6 +248,11 @@
 		flex-direction: column;
 		min-height: 100vh;
 	}
+
+	#admin.overlay-open {
+		overflow: hidden;
+    	position: fixed;
+	}
 	
 	.header {
 		background: $brand-almost-black;
@@ -387,6 +392,7 @@
 		height: 100%;
 		background: white;
 		padding: 20px;
+		overflow: auto;
 	}
 	
 	.overlay .trayHeader {
