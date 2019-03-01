@@ -32,3 +32,7 @@ Example
 		})
 	]
 ```
+
+# Development
+
+* Publish - `sudo npm run publish -- SEMVER`
