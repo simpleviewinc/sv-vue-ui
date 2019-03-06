@@ -2,8 +2,7 @@
 	<div class="form-field-browse-tags">
 		<h3>{{label}}</h3>
 		<div class="loading" v-if="options === undefined">
-			<spinner ref="spinner" data="data" loading_text="Loading..."></spinner>
-			<!-- Loading... <i class="fas fa-spinner fa-spin"></i> -->
+			Loading... <i class="fas fa-spinner fa-spin"></i>
 		</div>
 		<div class="options" v-if="options">
 			<div class="option" v-for="option in options" :key="option.value">
@@ -20,7 +19,6 @@
 
 <script>
 	import { advancedPropsMixin, mirrorProp } from "../lib/utils.js";
-	import spinner from "./spinner.vue";
 	
 	export default {
 		mixins : [
@@ -51,9 +49,7 @@
 			}
 		},
 		mounted : async function() {
-			this.$refs.spinner.inProgress = true;
 			this.options = await this.args.getOptions();
-			this.$refs.spinner.inProgress = false;
 		},
 		methods : {
 			click : function(option) {
@@ -69,9 +65,6 @@
 			data : function() {
 				this.$emit("input", this.data.length > 0 ? this.data : undefined);
 			}
-		},
-		components : {
-			spinner
 		}
 	}
 </script>

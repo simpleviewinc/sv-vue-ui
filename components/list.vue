@@ -1,7 +1,10 @@
 <template>	
 	<div class="admin-list" v-if="valid">	
-		<spinner data="data" ref="spinner" loading_text="Loading..." error_message="There are no items that match your query" text_align="center" font_size="24"></spinner>
-		<div class="header">
+		<div class="loading" v-if="loading">
+			<div v-if="returnedData === false">There are no items that match your query</div>
+			<div v-else>Loading... <i class="fas fa-spinner fa-spin"></i></div>
+		</div>
+		<div class="header" v-if="!loading">
 			<div class="headerLeft">
 				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancel"></i>
 				<h1>{{title}}</h1>
@@ -15,7 +18,7 @@
 				>Create New</admin-button>
 			</div>
 		</div>
-		<table>
+		<table v-if="!loading">
 			<thead>
 				<tr>
 					<th>
@@ -54,8 +57,8 @@
 </template>
 
 <script>
+	import lodash from "lodash";
 	import adminButton from "./button.vue";
-	import spinner from "./spinner.vue";
 	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
@@ -78,22 +81,24 @@
 					{ name : "showBack", type : "boolean" },
 					{ name : "actions", type : "array", schema : { type : "string", enum : ["select", "edit", "remove"] } },
 					{ name : "buttons", type : "array", schema : { type : "string", enum : ["create"] } },
-					{ name : "data", type : "array" }
+					{ name : "data", type : "array" },
+					{ name : "returnedData", type : "boolean" }
 				],
 				prop : "valid"
 			})
 		],
 		data : function() {
-			return {}
+			return {
+				loading : true
+			}
 		},
 		created : async function() {
-		},
-		mounted : async function(){
-			console.log(this)
-			this.$refs.spinner.inProgress = true
 			this.$emit("filter", {});
-		
-			this.$refs.spinner.inProgress = false;
+		},
+		watch : {
+			data : function(val) {
+				this.loading = lodash.isEmpty(val);
+			}
 		},
 		methods : {
 			cancel : function() {
@@ -113,8 +118,7 @@
 			}
 		},
 		components : {
-			adminButton,
-			spinner
+			adminButton
 		},
 	}
 </script>
@@ -178,5 +182,19 @@
 	
 	.admin-list table tbody td {
 		padding: 10px;
+	}
+
+	.admin-list .loading{
+		display: flex;
+		text-align: center;
+    	height: calc(100vh - 100px);
+    	min-height: 267px;
+	}
+
+	.admin-list .loading div{
+		flex : 1;
+		font-size: 32px;
+    	font-weight: bold;
+		align-self: center;
 	}
 </style>

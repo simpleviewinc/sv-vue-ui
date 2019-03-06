@@ -8,6 +8,7 @@
 			:actions="config.actions"
 			:buttons="config.buttons"
 			:data="data"
+			:returnedData="returnedData"
 			@cancel="cancel"
 			@filter="filter"
 			@edit="edit"
@@ -57,7 +58,8 @@
 		data : function() {
 			return {
 				config : undefined,
-				data : []
+				data : [],
+				returnedData : undefined
 			}
 		},
 		computed : {
@@ -86,7 +88,7 @@
 			},
 			filter : async function() {
 				this.data = await this.config.methods.getData();
-		
+				this.returnedData = this.data.length > 0 ? true : false;
 			},
 			create : function() {
 				adminRouter.go({
