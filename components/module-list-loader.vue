@@ -1,7 +1,7 @@
 <template>
 	<div :class="name">
 		<admin-list
-			v-if="config"
+			v-if="config && data.length >= 0"
 			:title="config.title"
 			:showBack="showBack"
 			:columns="config.columns"
@@ -86,6 +86,7 @@
 			},
 			filter : async function() {
 				this.data = await this.config.methods.getData();
+		
 			},
 			create : function() {
 				adminRouter.go({

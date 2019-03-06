@@ -1,5 +1,6 @@
-<template>
-	<div class="admin-list" v-if="valid">
+<template>	
+	<div class="admin-list" v-if="valid">	
+		<spinner data="data" ref="spinner" loading_text="Loading..." error_message="There are no items that match your query" text_align="center" font_size="24"></spinner>
 		<div class="header">
 			<div class="headerLeft">
 				<i v-if="showBack" class="back fas fa-arrow-left" @click="cancel"></i>
@@ -54,6 +55,7 @@
 
 <script>
 	import adminButton from "./button.vue";
+	import spinner from "./spinner.vue";
 	import { advancedPropsMixin } from "../lib/utils.js";
 	
 	export default {
@@ -85,7 +87,13 @@
 			return {}
 		},
 		created : async function() {
+		},
+		mounted : async function(){
+			console.log(this)
+			this.$refs.spinner.inProgress = true
 			this.$emit("filter", {});
+		
+			this.$refs.spinner.inProgress = false;
 		},
 		methods : {
 			cancel : function() {
@@ -105,8 +113,9 @@
 			}
 		},
 		components : {
-			adminButton
-		}
+			adminButton,
+			spinner
+		},
 	}
 </script>
 
