@@ -1,6 +1,10 @@
 <template>
 	<div class="form-field-tagselect" v-if="valid">
+		<div class="loading" v-if="options === undefined">
+			Loading... <i class="fas fa-spinner fa-spin"></i>
+		</div>
 		<form-field-text
+			v-if="options"
 			@focus="focus"
 			@blur="blur"
 			:label="label"
