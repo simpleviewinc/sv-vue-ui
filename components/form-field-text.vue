@@ -1,7 +1,7 @@
 <template>
 	<div class="inputWrapper" :class="{ focus : focus, active : focus || value, error : hasError, [`inputType_${inputType}`] : true }">
 		<div class="container">
-			<input ref="input" :type="inputType" class="inputField textStyles" v-model="data" @focus="focus = true"/>
+			<input ref="input" :type="inputType" class="inputField textStyles" v-model="data" @focus="focus = true" @blur="focus = false"/>
 			<label class="textStyles">{{label}}<span v-if="!required"> (optional)</span></label>
 			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		</div>

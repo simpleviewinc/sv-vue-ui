@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="buttons" v-if="buttons">
-			<admin-button type="button" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
+			<admin-button type="submit" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
 			<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
 		</div>
 		<slot name="afterForm"></slot>
