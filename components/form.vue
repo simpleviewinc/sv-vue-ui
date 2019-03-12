@@ -86,6 +86,14 @@
 				saveInProgress : false
 			}
 		},
+		mounted : function() {
+			// for each possible key emit a change event which has the key, it's value and the total data of the form.
+			this.fields.forEach(field => {
+				this.$watch(`modelData.${field.name}`, () => {
+					this.$emit("change", { key : field.name, value : this.modelData[field.name], data : this.modelData });
+				});
+			});
+		},
 		computed : {
 			showHeader : function() {
 				return this.title || this.buttons;
