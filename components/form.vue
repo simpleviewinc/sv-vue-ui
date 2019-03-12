@@ -18,14 +18,12 @@
 					:required="field.required"
 					:args="field.args"
 					:errorMessage="field.errorMessage"
-					@errorMessage="field.errorMessage = $event"
-					@submit="submit"
 					v-model="modelData[field.name]"
 				></component>
 			</div>
 		</div>
 		<div class="buttons" v-if="buttons">
-			<admin-button type="submit" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
+			<admin-button type="submit" theme="primary" :inProgress="saveInProgress">Save</admin-button>
 			<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
 		</div>
 		<slot name="afterForm"></slot>
