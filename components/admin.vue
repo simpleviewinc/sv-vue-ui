@@ -3,7 +3,7 @@
 		<div class="header">
 			<slot name="header"></slot>
 		</div>
-		<div class="body" >
+		<div class="body">
 			<div class="sidebar">
 				<ul v-if="nav">
 					<li v-for="item in nav" :key="item.name" @click="go(item.routerArgs)">
@@ -251,7 +251,7 @@
 
 	#admin.overlay-open {
 		overflow: hidden;
-    	position: fixed;
+		position: fixed;
 	}
 	
 	.header {
