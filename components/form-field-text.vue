@@ -6,13 +6,11 @@
 			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
 		</div>
 		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
-		<strengthMeter v-if="cleanArgs.strengthmeter && !hasError" :field="data" :strengthMeter="cleanArgs.strengthmeter"></strengthMeter>
 	</div>
 </template>
 
 <script>
 	import { advancedPropsMixin, mirrorProp } from "../lib/utils.js";
-	import strengthMeter from "./strength-meter.vue";
 	
 	export default {
 		mixins : [
@@ -27,8 +25,7 @@
 						type : "object",
 						schema : [
 							{ name : "type", type : "string" },
-							{ name : "autofocus", type : "boolean" },
-							{ name : "strengthmeter", type : "function" }
+							{ name : "autofocus", type : "boolean" }
 						],
 						allowExtraKeys : false
 					}
@@ -54,7 +51,6 @@
 				const cleanArgs = { ...this.args };
 				cleanArgs.type = cleanArgs.type !== undefined ? cleanArgs.type : "text";
 				cleanArgs.autofocus = cleanArgs.autofocus !== undefined ? cleanArgs.autofocus : false;
-				cleanArgs.strengthmeter = cleanArgs.strengthmeter !== undefined ? cleanArgs.strengthmeter : false;
 
 				return cleanArgs;
 			},
@@ -82,9 +78,6 @@
 				
 				this.$emit("input", this.data === "" ? undefined : this.data);
 			}
-		},
-		components : {
-			strengthMeter
 		}
 	}
 </script>
