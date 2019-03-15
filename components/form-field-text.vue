@@ -3,7 +3,7 @@
 		<div class="container">
 			<input ref="input" :type="inputType" class="inputField textStyles" v-model="data" @focus="focus = true" @blur="focus = false"/>
 			<label class="textStyles">{{label}}<span v-if="!required"> (optional)</span></label>
-			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="showCharacters = !showCharacters">{{showButtonText}}</button>
+			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="cleanArgs.showCharacters = !cleanArgs.showCharacters">{{showButtonText}}</button>
 		</div>
 		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
 	</div>
@@ -25,7 +25,8 @@
 						type : "object",
 						schema : [
 							{ name : "type", type : "string" },
-							{ name : "autofocus", type : "boolean" }
+							{ name : "autofocus", type : "boolean" },
+							{ name : "showCharacters", type : "boolean" }
 						],
 						allowExtraKeys : false
 					}
@@ -35,9 +36,23 @@
 			mirrorProp({ name : "errorMessage" })
 		],
 		data : function() {
+			const cleanArgs = this.args || {};
+			
+			if (cleanArgs.type === undefined) {
+				this.$set(cleanArgs, "type", "text");
+			}
+			
+			if (cleanArgs.showCharacters === undefined) {
+				this.$set(cleanArgs, "showCharacters", false);
+			}
+			
+			if (cleanArgs.autofocus === undefined) {
+				this.$set(cleanArgs, "autofocus", false);
+			}
+			
 			return {
+				cleanArgs,
 				data : this.value,
-				showCharacters : false,
 				focus : false
 			}
 		},
@@ -47,21 +62,14 @@
 			}
 		},
 		computed : {
-			cleanArgs : function() {
-				const cleanArgs = { ...this.args };
-				cleanArgs.type = cleanArgs.type !== undefined ? cleanArgs.type : "text";
-				cleanArgs.autofocus = cleanArgs.autofocus !== undefined ? cleanArgs.autofocus : false;
-
-				return cleanArgs;
-			},
 			hasError : function() {
 				return this.$data.$_errorMessage !== "";
 			},
 			inputType : function() {
-				return this.cleanArgs.type === "text" || this.showCharacters === true ? "text" : "password";
+				return this.cleanArgs.type === "text" || this.cleanArgs.showCharacters === true ? "text" : "password";
 			},
 			showButtonText : function() {
-				return this.showCharacters === true ? "Hide" : "Show";
+				return this.cleanArgs.showCharacters === true ? "Hide" : "Show";
 			}
 		},
 		watch : {
