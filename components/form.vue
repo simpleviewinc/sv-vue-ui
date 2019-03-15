@@ -69,9 +69,14 @@
 			})
 		],
 		data : function() {
-			const modelData = { ...this.data };
+			const modelData = this.data || {};
 			
 			const fieldsClean = this.fields.map(val => {
+				// initializes keys that don't exist as undefined so that they work reactively
+				if (modelData[val.name] === undefined) {
+					this.$set(modelData, val.name, undefined);
+				}
+				
 				return {
 					...val,
 					errorMessage : "",
@@ -86,15 +91,16 @@
 				saveInProgress : false
 			}
 		},
-		mounted : function() {
-			// for each possible key emit a change event which has the key, it's value and the total data of the form.
-			this.fields.forEach(field => {
-				this.$watch(`modelData.${field.name}`, () => {
-					this.$emit("change", { key : field.name, value : this.modelData[field.name], data : this.modelData });
-				});
-			});
-		},
 		computed : {
+			simpleData : function() {
+				const keys = Object.keys(this.modelData);
+				const returnData = {};
+				keys.forEach(key => {
+					returnData[key] = this.modelData[key];
+				});
+				
+				return returnData;
+			},
 			showHeader : function() {
 				return this.title || this.buttons;
 			},
@@ -120,7 +126,7 @@
 			},
 			validate : async function() {
 				const result = await validateForm({
-					data : this.modelData,
+					data : this.simpleData,
 					validation : this.validationObj
 				});
 				
@@ -141,7 +147,7 @@
 				this.saveInProgress = true;
 				
 				this.$emit("submit", {
-					data : this.modelData
+					data : this.simpleData
 				});
 			}
 		},

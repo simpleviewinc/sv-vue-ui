@@ -24,7 +24,8 @@
 			advancedPropsMixin({
 				schema : [
 					{ name : "type", type : "string", enum : ["icon", "button", "submit"], required : true },
-					{ name : "theme", type : "string", enum : ["primary", "none", "destructive"] },
+					{ name : "theme", type : "string", enum : ["primary", "none", "destructive", "noneBorder"] },
+					{ name : "styles", type : "array", schema : { type : "string", enum : ["small"] } },
 					{ name : "inProgress", type : "boolean" },
 					{ name : "iconClass", type : "string" }
 				],
@@ -44,6 +45,12 @@
 				
 				if (this.isIcon) {
 					temp.push(this.iconClass);
+				}
+				
+				if (this.styles) {
+					this.styles.forEach(style => {
+						temp.push(`style_${style}`);
+					});
 				}
 				
 				return temp;
@@ -89,6 +96,10 @@
 		font-family: $font-heavy;
 	}
 	
+	.admin-button button.style_small {
+		padding: 10px;
+	}
+	
 	.admin-button button .spinner {
 		color: white;
 		padding: 0px 0px 0px 0px;
@@ -97,6 +108,12 @@
 	.admin-button button.theme_none {
 		background: none;
 		color: $brand-almost-black;
+	}
+	
+	.admin-button button.theme_noneBorder {
+		background: none;
+		color: $brand-almost-black;
+		border: 1px solid $brand-almost-black;
 	}
 	
 	.admin-button button.theme_primary {
