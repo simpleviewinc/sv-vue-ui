@@ -25,7 +25,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="(row, i) in data">
-					<td>
+					<td class="actions">
 						<admin-button
 							v-if="actions.includes('select')"
 							type="button"
@@ -169,5 +169,9 @@
 	
 	.admin-list table tbody td {
 		padding: 10px;
+	}
+	
+	.admin-list table tbody td.actions {
+		white-space: nowrap;
 	}
 </style>

@@ -261,6 +261,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		flex-shrink: 0;
 	}
 	
 	.header .leftContainer {
@@ -311,12 +312,13 @@
 	
 	.body {
 		display: flex;
-		flex: 1;
+		flex: 1 1 auto;
 	}
 	
 	.body .sidebar {
 		width: 90px;
 		background: $brand-shadow;
+		flex-shrink: 0;
 	}
 	
 	.body .sidebar ul {
@@ -350,7 +352,7 @@
 	.body .main {
 		position: relative;
 		padding: 20px;
-		flex: 1;
+		flex: 1 1 auto;
 	}
 	
 	.overlay {
