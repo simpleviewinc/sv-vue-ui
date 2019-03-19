@@ -128,6 +128,7 @@
 		margin-left: 9px;
 		padding: 3px;
 		color: $brand-medium-gray;
+		z-index: 1;
 	}
 	
 	.inputWrapper.active label {
