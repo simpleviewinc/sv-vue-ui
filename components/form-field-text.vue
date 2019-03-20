@@ -2,7 +2,7 @@
 	<div class="inputWrapper" :class="{ focus : focus, active : focus || value, error : hasError, [`inputType_${inputType}`] : true }">
 		<div class="container">
 			<label class="textStyles">{{label}}<span v-if="!required"> (optional)</span></label>
-			<input ref="input" :type="inputType" class="inputField textStyles" v-model="data" @focus="focus = true" @blur="focus = false"/>
+			<input ref="input" :type="inputType" :class="{'password' : cleanArgs.type === 'password'}" class="inputField textStyles" v-model="data" @focus="focus = true" @blur="focus = false"/>
 			<button v-if="cleanArgs.type === 'password'" type="button" tabindex="-1" class="showButton" @click="cleanArgs.showCharacters = !cleanArgs.showCharacters">{{showButtonText}}</button>
 		</div>
 		<div class="validationError" v-if="hasError">{{$data.$_errorMessage}}</div>
@@ -190,7 +190,7 @@
 		color: $brand-red;
 	}
 	
-	.inputWrapper.inputType_password .inputField {
+	.inputWrapper .inputField.password {
 		/* allocate space for show/hide button */
 		padding-right: 80px;
 	}
