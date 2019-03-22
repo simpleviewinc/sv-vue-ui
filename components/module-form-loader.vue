@@ -1,6 +1,7 @@
 <template>
 	<div :class="name">
 		<admin-form v-if="config"
+			ref="form"
 			:title="title"
 			:showBack="showBack"
 			:buttons="true"
@@ -75,6 +76,7 @@
 					await this.config.methods.save({ data });
 				} catch(e) {
 					adminRouter.errorDialog(e);
+					this.$refs.form.saveInProgress = false
 					return;
 				}
 				
