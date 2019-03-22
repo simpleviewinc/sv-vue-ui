@@ -18,6 +18,7 @@
 					:required="field.required"
 					:args="field.args"
 					:errorMessage="field.errorMessage"
+					@errorMessage="field.errorMessage = $event"
 					v-model="modelData[field.name]"
 				></component>
 			</div>
