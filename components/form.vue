@@ -7,7 +7,7 @@
 			</div>
 			<div class="buttons" v-if="buttons">
 				<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
-				<admin-button type="button" theme="primary" :inProgress="saveInProgress" @click="saveClick">Save</admin-button>
+				<admin-button type="button" theme="primary" :inProgress="state.saveInProgress" @click="saveClick">Save</admin-button>
 			</div>
 		</div>
 		<div class="fields">
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		<div class="buttons" v-if="buttons">
-			<admin-button type="submit" theme="primary" :inProgress="saveInProgress">Save</admin-button>
+			<admin-button type="submit" theme="primary" :inProgress="state.saveInProgress">Save</admin-button>
 			<admin-button type="button" theme="none" @click="cancelClick">Cancel</admin-button>
 		</div>
 		<slot name="afterForm"></slot>
@@ -64,6 +64,13 @@
 					{ name : "buttons", type : "boolean" },
 					{ name : "showBack", type : "boolean" },
 					{ name : "data", type : "object" },
+					{
+						name : "sharedState",
+						type : "object",
+						schema : [
+							{ name : "saveInProgress", type : "boolean" }
+						]
+					},
 					{ name : "title", type : "string" }
 				],
 				prop : "valid"
@@ -71,6 +78,11 @@
 		],
 		data : function() {
 			const modelData = this.data || {};
+			const state = this.sharedState || {};
+			
+			if (state.saveInProgress === undefined) {
+				this.$set(state, "saveInProgress", false);
+			}
 			
 			const fieldsClean = this.fields.map(val => {
 				// initializes keys that don't exist as undefined so that they work reactively
@@ -87,9 +99,9 @@
 			});
 			
 			return {
+				state,
 				fieldsClean,
-				modelData,
-				saveInProgress : false
+				modelData
 			}
 		},
 		computed : {
@@ -145,7 +157,7 @@
 				const valid = await this.validate();
 				if (valid === false) { return; }
 				
-				this.saveInProgress = true;
+				this.state.saveInProgress = true;
 				
 				this.$emit("submit", {
 					data : this.simpleData

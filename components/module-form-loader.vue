@@ -6,6 +6,7 @@
 			:buttons="true"
 			:data="data"
 			:fields="config.fields"
+			:sharedState="sharedState"
 			@submit="submit"
 			@cancel="cancel"
 		>
@@ -51,7 +52,8 @@
 		data : function() {
 			return {
 				data : undefined,
-				config : undefined
+				config : undefined,
+				sharedState : {}
 			}
 		},
 		computed : {
@@ -75,6 +77,7 @@
 					await this.config.methods.save({ data });
 				} catch(e) {
 					adminRouter.errorDialog(e);
+					this.sharedState.saveInProgress = false;
 					return;
 				}
 				
