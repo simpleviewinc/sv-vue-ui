@@ -57,7 +57,7 @@
 		data : function() {
 			return {
 				config : undefined,
-				data : []
+				data : undefined
 			}
 		},
 		computed : {

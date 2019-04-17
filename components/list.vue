@@ -23,7 +23,7 @@
 					<th v-for="item in columns">{{item.label}}</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody v-if="data">
 				<tr v-for="(row, i) in data">
 					<td class="actions">
 						<admin-button
@@ -49,6 +49,12 @@
 				</tr>
 			</tbody>
 		</table>
+		<div v-if="data === undefined">
+			<p>Loading... <i class="fas fa-spinner fa-spin"></i></p>
+		</div>
+		<div v-if="data && data.length === 0">
+			<p>There are no items that match the current filter.</p>
+		</div>
 	</div>
 </template>
 
