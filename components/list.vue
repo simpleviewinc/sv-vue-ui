@@ -7,17 +7,18 @@
 			</div>
 			<div class="buttons" v-if="buttons">
 				<admin-button
-					v-if="buttons.includes('create')"
-					type="button"
-					theme="primary"
-					@click="create"
-				>Create New</admin-button>
+					v-for="button in buttons"
+					:key="button.name"
+					:type="button.type"
+					:theme="button.theme"
+					@click="button.click"
+				>{{button.label}}</admin-button>
 			</div>
 		</div>
 		<table>
 			<thead>
 				<tr>
-					<th>
+					<th v-if="actions.length">
 						Actions
 					</th>
 					<th v-for="item in columns">{{item.label}}</th>
@@ -25,25 +26,15 @@
 			</thead>
 			<tbody v-if="data">
 				<tr v-for="(row, i) in data">
-					<td class="actions">
+					<td class="actions" v-if="actions.length">
 						<admin-button
-							v-if="actions.includes('select')"
-							type="button"
-							theme="primary"
-							@click="select(row)"
-						>Select</admin-button>
-						<admin-button
-							v-if="actions.includes('edit')"
-							type="icon"
-							icon-class="fa-pencil-alt"
-							@click="edit(row)"
-						></admin-button>
-						<admin-button
-							v-if="actions.includes('remove')"
-							type="icon"
-							icon-class="fa-trash-alt"
-							@click="remove(row)"
-						></admin-button>
+							v-for="action in actions"
+							:key="action.name"
+							:type="action.type"
+							:icon-class="action['icon-class']"
+							:theme="action.theme"
+							@click="action.click({ row })"
+						>{{action.label}}</admin-button>
 					</td>
 					<td v-for="column in columns">{{row[column.name]}}</td>
 				</tr>
@@ -80,8 +71,37 @@
 					},
 					{ name : "title", type : "string" },
 					{ name : "showBack", type : "boolean" },
-					{ name : "actions", type : "array", schema : { type : "string", enum : ["select", "edit", "remove"] } },
-					{ name : "buttons", type : "array", schema : { type : "string", enum : ["create"] } },
+					{
+						name : "actions",
+						type : "array",
+						schema : {
+							type : "object",
+							schema : [
+								{ name : "name", type : "string", required : true },
+								{ name : "label", type : "string" },
+								{ name : "type", type : "string", required : true },
+								{ name : "icon-class", type : "string" },
+								{ name : "theme", type : "string" },
+								{ name : "click", type : "function", required : true }
+							],
+							allowExtraKeys : false
+						}
+					},
+					{
+						name : "buttons",
+						type : "array",
+						schema : {
+							type : "object",
+							schema : [
+								{ name : "name", type : "string", required : true },
+								{ name : "label", type : "string", required : true },
+								{ name : "type", type : "string", required : true },
+								{ name : "theme", type : "string" },
+								{ name : "click", type : "function", required : true }
+							],
+							allowExtraKeys : false
+						}
+					},
 					{ name : "data", type : "array" }
 				],
 				prop : "valid"
@@ -96,18 +116,6 @@
 		methods : {
 			cancel : function() {
 				this.$emit("cancel");
-			},
-			create : function() {
-				this.$emit("create");
-			},
-			select : async function(row) {
-				this.$emit("select", { row });
-			},
-			edit : function(row) {
-				this.$emit("edit", { row });
-			},
-			remove : function(row) {
-				this.$emit("remove", { row });
 			}
 		},
 		components : {
