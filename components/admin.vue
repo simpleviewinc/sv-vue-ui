@@ -153,6 +153,7 @@
 					schema : [
 						{ name : "url", type : "string", required : true },
 						{ name : "type", type : "string", enum : ["main", "overlay"], default : "main" },
+						{ name : "push", type : "boolean" },
 						{ name : "args", type : "object", default : {} }
 					],
 					allowExtraKeys : false,
@@ -164,7 +165,9 @@
 				if (args.type === "main") {
 					this.mainComponent = undefined;
 					this.$nextTick(function() {
-						window.history.pushState({}, "", args.url);
+						if (args.push) {
+							window.history.pushState({}, "", args.url);
+						}
 						
 						this.mainComponent = {
 							is : route.is,
