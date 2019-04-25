@@ -18,7 +18,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th v-if="actions.length">
+					<th class="actions" v-if="actions.length">
 						Actions
 					</th>
 					<th v-for="item in columns">{{item.label}}</th>
@@ -183,6 +183,10 @@
 	
 	.admin-list table tbody td {
 		padding: 10px;
+	}
+	
+	.admin-list table thead th.actions {
+		width: 150px;
 	}
 	
 	.admin-list table tbody td.actions {
