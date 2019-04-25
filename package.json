@@ -1,6 +1,6 @@
 {
 	"name": "@simpleview/vue-ui",
-	"version": "1.0.16",
+	"version": "1.0.17",
 	"description": "Vue admin interface components and UI/UX utilities",
 	"author": "Owen Allen <owenallenaz@gmail.com>",
 	"scripts": {
