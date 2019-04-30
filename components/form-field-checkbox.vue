@@ -50,6 +50,12 @@
 		},
 		mounted : async function() {
 			this.options = await this.args.getOptions();
+			this.data = this.data.filter(val => this.optionValues.includes(val));
+		},
+		computed : {
+			optionValues : function() {
+				return this.options.map(val => val.value);
+			}
 		},
 		methods : {
 			click : function(option) {
