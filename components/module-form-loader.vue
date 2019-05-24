@@ -45,8 +45,16 @@
 				allowExtraKeys : false,
 				throwOnInvalid : true
 			});
-			
-			this.data = config.methods.getData ? await config.methods.getData() : undefined;
+
+			if(config.methods.getData){
+				try{
+					this.data = config.methods.getData ? await config.methods.getData() : undefined;
+				}catch(e){
+					adminRouter.back();
+					adminRouter.errorDialog(e);
+					return;
+				}
+			}
 			this.config = config;
 		},
 		data : function() {

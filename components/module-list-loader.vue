@@ -191,7 +191,12 @@
 				});
 			},
 			filter : async function() {
-				this.data = await this.config.methods.getData();
+				try{
+					this.data = await this.config.methods.getData();
+				}catch(e){
+					adminRouter.errorDialog(e);
+					return;
+				}
 			},
 			create : function() {
 				adminRouter.go({
