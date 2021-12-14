@@ -78,8 +78,9 @@
 		width: 100%;
 		padding: 20px;
 		margin: 0 auto;
-		top: -50%;
-		margin-top: 50%;
+		top: 50%;
+		-ms-transform: translateY(-50%);
+		transform: translateY(-50%);
 	}
 	
 	.admin-dialog .buttons {
